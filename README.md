@@ -6,17 +6,19 @@ Furthermore, news from the school, such as new teachers, can also be stored. Thi
 ### Prerequisites
 - [Node.js](https://nodejs.org/en/)
 - [Truffle](https://www.trufflesuite.com/truffle)
-    - `npm install -g truffle`
+    - `npm install truffle --location=global`
 - [Ganache](https://www.trufflesuite.com/ganache)
 
-### Installation
-1. Clone the repo
-    - `git clone
-    - `cd decentralized-democratic-republic`
-    - `npm install`
-    - `truffle compile`
-    - `truffle migrate`
-2. Start Ganache
-3. Install MetaMask and connect it to Ganache
-4. Start the server
-    - `npm run dev`
+## Run Project
+
+1. Setup a local blockchain with Ganache 
+2. Setup MetaMask to connect to Ganache
+3. Compile and deploy the contracs
+   - `cd contracts
+   - `truffle compile`
+   - `truffle migrate`
+4. Run webclient
+   - `cd webclient`
+   - `npm install` (when running for the first time)
+   - `npm start`
+   - open http://localhost:3000 in your browser
