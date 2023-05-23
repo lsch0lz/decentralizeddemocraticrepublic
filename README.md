@@ -22,3 +22,16 @@ Furthermore, news from the school, such as new teachers, can also be stored. Thi
    - `npm install` (when running for the first time)
    - `npm start`
    - open http://localhost:3000 in your browser
+
+## Mock Ups
+### Login Page
+![Login Page](./assets/login.png)
+
+### Landing Page
+![Landing Page](./assets/landing_page.png)
+
+### Voting Page
+![Voting Page](./assets/vote.png)
+
+### Creating Page
+![Creating Page](./assets/create.png)
