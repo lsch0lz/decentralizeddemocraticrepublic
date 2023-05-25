@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import lorenIpsumContract from './contracts/StringContract.json';
 import Web3 from 'web3';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Login from './components/Login';
 
 
 const contractABI = lorenIpsumContract.abi;
@@ -27,23 +29,19 @@ function App() {
         });
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo"/>
-                <p>
-                    Value from contract: {value}
-                </p>
-                <h1>{value}</h1>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-
-                </a>
-            </header>
-        </div>
+        <Router>
+            <div className="App">
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <p>Value from contract: {value}</p>
+                    <h1>{value}</h1>
+                    <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer"></a>
+                </header>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
