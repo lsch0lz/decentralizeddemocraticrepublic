@@ -9,6 +9,7 @@ contract School {
     
     struct Student {
         string name;
+        string password;
         uint256 id;
     }
     
@@ -24,42 +25,42 @@ contract School {
         mapping(uint256 => Class) classes;
     }
     
-    mapping(address => SchoolData) public schools;
+    mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
     
     function createSchool(string memory _name) public {
-        require(schools[msg.sender].principal == address(0), "School already exists");
-        schools[msg.sender].name = _name;
-        schools[msg.sender].principal = msg.sender;
+        require(schools[msg.sender].principal == address(0), "School already exists");  // Check if school already exists
+        schools[msg.sender].name = _name;  // Set the school's name
+        schools[msg.sender].principal = msg.sender;  // Set the caller's address as the principal
     }
     
     function createClass(uint256 _classId, string memory _name) public {
         SchoolData storage school = schools[msg.sender];
-        require(school.principal != address(0), "School does not exist");
-        require(school.classes[_classId].teachers.length == 0, "Class already exists");
-        school.classes[_classId].name = _name;
+        require(school.principal != address(0), "School does not exist");  // Check if the school exists
+        require(school.classes[_classId].teachers.length == 0, "Class already exists");  // Check if class already exists
+        school.classes[_classId].name = _name;  // Set the class name
     }
     
     function addTeacherToClass(uint256 _classId, string memory _teacherName, uint256 _teacherId) public {
         SchoolData storage school = schools[msg.sender];
-        require(school.principal != address(0), "School does not exist");
-        require(school.classes[_classId].teachers.length > 0, "Class does not exist");
-        school.classes[_classId].teachers.push(Teacher(_teacherName, _teacherId));
+        require(school.principal != address(0), "School does not exist");  // Check if the school exists
+        require(school.classes[_classId].teachers.length > 0, "Class does not exist");  // Check if class exists
+        school.classes[_classId].teachers.push(Teacher(_teacherName, _teacherId));  // Add teacher to the class
     }
     
-    function addStudentToClass(uint256 _classId, string memory _studentName, uint256 _studentId) public {
+    function addStudentToClass(uint256 _classId, string memory _studentName, uint256 _studentId, string memory _password) public {
         SchoolData storage school = schools[msg.sender];
-        require(school.principal != address(0), "School does not exist");
-        require(school.classes[_classId].teachers.length > 0, "Class does not exist");
-        school.classes[_classId].students.push(Student(_studentName, _studentId));
+        require(school.principal != address(0), "School does not exist");  // Check if the school exists
+        require(school.classes[_classId].teachers.length > 0, "Class does not exist");  // Check if class exists
+        school.classes[_classId].students.push(Student(_studentName, _password, _studentId));  // Add student to the class
     }
     
     function getSchoolName() public view returns (string memory) {
-        return schools[msg.sender].name;
+        return schools[msg.sender].name;  // Get the name of the school
     }
     
     function getClassDetails(uint256 _classId) public view returns (string memory, uint256, uint256) {
         SchoolData storage school = schools[msg.sender];
         Class storage class = school.classes[_classId];
-        return (class.name, class.teachers.length, class.students.length);
+        return (class.name, class.teachers.length, class.students.length);  // Get the class details (name, number of teachers, number of students)
     }
 }
