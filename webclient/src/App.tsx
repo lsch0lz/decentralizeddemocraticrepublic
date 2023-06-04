@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Login from './components/Login';
@@ -9,33 +9,30 @@ import Navigation, {NavLinkItem} from "./components/Navigation";
 import CreationPage from "./components/CreationPage/CreationPage";
 
 
-class App extends Component {
+function App() {
 
-    render() {
+    const navLinks: NavLinkItem[] = [
+        {text: 'Home', path: '/'},
+        {text: 'About', path: '/about'},
+        {text: 'Contact', path: '/contact'},
+        {text: 'Login', path: '/login'}
+    ];
 
-        const navLinks: NavLinkItem[] = [
-            { text: 'Home', path: '/' },
-            { text: 'About', path: '/about' },
-            { text: 'Contact', path: '/contact' },
-            { text: 'Login', path: '/login' }
-        ];
-
-        // @ts-ignore
-        return (
-            <Router>
-                <div>
-                    <Navigation navLinks={navLinks} />
-                    <Routes>
-                        <Route path="/" Component={Home}/>
-                        <Route path="/create" Component={CreationPage}/>
-                        <Route path="/about" Component={About}/>
-                        <Route path="/login" Component={Login}/>
-                        <Route Component={Error}/>
-                    </Routes>
-                </div>
-            </Router>
-        );
-    }
+    // @ts-ignore
+    return (
+        <Router>
+            <div>
+                <Navigation navLinks={navLinks}/>
+                <Routes>
+                    <Route path="/" Component={Home}/>
+                    <Route path="/create" Component={CreationPage}/>
+                    <Route path="/about" Component={About}/>
+                    <Route path="/login" Component={Login}/>
+                    <Route Component={Error}/>
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
