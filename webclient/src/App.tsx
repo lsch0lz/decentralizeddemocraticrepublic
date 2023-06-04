@@ -5,18 +5,29 @@ import Login from './components/Login';
 import Home from './components/Home';
 import About from "./components/About";
 import Error from "./components/Error";
-import Navigation from "./components/Navigation";
+import Navigation, {NavLinkItem} from "./components/Navigation";
+import CreationPage from "./components/CreationPage/CreationPage";
 
 
 class App extends Component {
+
     render() {
+
+        const navLinks: NavLinkItem[] = [
+            { text: 'Home', path: '/' },
+            { text: 'About', path: '/about' },
+            { text: 'Contact', path: '/contact' },
+            { text: 'Login', path: '/login' }
+        ];
+
         // @ts-ignore
         return (
             <Router>
                 <div>
-                    <Navigation />
+                    <Navigation navLinks={navLinks} />
                     <Routes>
                         <Route path="/" Component={Home}/>
+                        <Route path="/create" Component={CreationPage}/>
                         <Route path="/about" Component={About}/>
                         <Route path="/login" Component={Login}/>
                         <Route Component={Error}/>
