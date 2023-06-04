@@ -20,7 +20,7 @@ function CreationPage() {
         {value: 'Election', label: 'Election'}
     ];
 
-    const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(undefined);
+    const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(createOptions[0]);
 
     const handleSelect = (value: string) => {
         const selected = createOptions.find((option) => option.value === value);
