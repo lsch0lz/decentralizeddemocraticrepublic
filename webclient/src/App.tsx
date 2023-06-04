@@ -19,7 +19,6 @@ function App() {
         {text: 'Create', path: '/create'}
     ];
 
-    // @ts-ignore
     return (
         <Router>
             <div>
@@ -29,7 +28,7 @@ function App() {
                     <Route path="/create" Component={CreationPage}/>
                     <Route path="/about" Component={About}/>
                     <Route path="/login" Component={Login}/>
-                    <Route Component={Error}/>
+                    <Route path="*" Component={Error}/>
                 </Routes>
             </div>
         </Router>
