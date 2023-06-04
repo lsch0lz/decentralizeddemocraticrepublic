@@ -1,18 +1,11 @@
 import React, {useState} from 'react';
 import './SchoolCreation.css';
 
-interface SchoolCreationProps {
-}
-
 function SchoolCreation() {
-    const [name, setName] = useState('');
+    const [schoolName, setSchoolName] = useState('');
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setName(e.target.value);
-    };
-
-    const handleSave = () => {
-        setName('');
+        setSchoolName(e.target.value);
     };
 
     const saveToChain = () => {
@@ -22,12 +15,12 @@ function SchoolCreation() {
 
     return (
         <div className="SchoolCreation">
-            <form onSubmit={handleSave}>
+            <form onSubmit={saveToChain}>
                 <label>
-                    Name:
-                    <input type="text" value={name} onChange={handleNameChange}/>
+                    School Name
+                    <input type="text" value={schoolName} onChange={handleNameChange}/>
                 </label>
-                <button onClick={saveToChain} type="submit">Save to Chain</button>
+                <button type="submit">Create School</button>
             </form>
         </div>
     );

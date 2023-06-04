@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
 import './CreationPage.css';
 import Dropdown, {DropdownOption} from "./dropdown/Dropdown";
-import SchoolCreation from "./SchoolCreation/SchoolCreation";
+import SchoolCreation from "./creationforms/SchoolCreation";
+import {ClassCreation} from "./creationforms/ClassCreation";
+import {TeacherCreation} from "./creationforms/TecherCreation";
+import {StudentCreation} from "./creationforms/StudentCreation";
+import {ElectionCreation} from "./creationforms/ElectionCreation";
+
 
 interface CreationPageProps {
 }
@@ -23,17 +28,18 @@ function CreationPage() {
     };
 
     const renderSelectedOptionContent = () => {
+        // TODO: Filter options based on user role
         switch (selectedOption?.value) {
             case 'School':
                 return <SchoolCreation/>;
             case 'Class':
-                return <div>Selected: Class</div>;
+                return <ClassCreation/>;
             case 'Teacher':
-                return <div>Selected: Teacher</div>;
+                return <TeacherCreation/>;
             case 'Student':
-                return <div>Selected: Student</div>;
+                return <StudentCreation/>;
             case 'Election':
-                return <div>Selected: Election</div>;
+                return <ElectionCreation/>
             default:
                 return null;
         }
