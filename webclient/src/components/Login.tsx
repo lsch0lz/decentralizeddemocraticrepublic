@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import lorenIpsumContract from "../contracts/StringContract.json";
 import Web3 from "web3";
+import { useCookies} from "react-cookie";
 
 
 const contractABI = lorenIpsumContract.abi;
@@ -29,6 +30,8 @@ const LoginPage: React.FC = () => {
             console.error(error);
         });
 
+    const [cookies, setCookie] = useCookies(['username', 'password']);
+
     const handleLogin = () => {
         // Check if username and password match the value from App.tsx
         if (username === 'example' && password === value) {
@@ -37,6 +40,9 @@ const LoginPage: React.FC = () => {
             setShowSuccessMessage(true);
             setLoginError(false);
             // Perform additional actions or redirect to another page
+            // Set the session cookie with the "username" and "password" values
+            setCookie('username', username, { path: '/' });
+            setCookie('password', password, { path: '/' });
         } else {
             // Failed login
             console.log('Login failed');
@@ -66,7 +72,13 @@ const LoginPage: React.FC = () => {
                 />
             </div>
             {loginError && <p style={{ color: 'red' }}>Invalid username or password</p>}
-            {showSuccessMessage && <p style={{ color: 'green' }}>Correct Password</p>}
+            {showSuccessMessage && (
+                <div style={{ color: 'green' }}>
+                    <p>Correct Password</p>
+                    <p>Username: {cookies.username}</p>
+                    <p>Password: {cookies.password}</p>
+                </div>
+            )}
             <button onClick={handleLogin}>Login</button>
         </div>
     );
