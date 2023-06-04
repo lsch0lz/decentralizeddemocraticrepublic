@@ -15,7 +15,8 @@ function App() {
         {text: 'Home', path: '/'},
         {text: 'About', path: '/about'},
         {text: 'Contact', path: '/contact'},
-        {text: 'Login', path: '/login'}
+        {text: 'Login', path: '/login'},
+        {text: 'Create', path: '/create'}
     ];
 
     // @ts-ignore
