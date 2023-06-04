@@ -8,9 +8,6 @@ import {StudentCreation} from "./creationforms/StudentCreation";
 import {ElectionCreation} from "./creationforms/ElectionCreation";
 
 
-interface CreationPageProps {
-}
-
 function CreationPage() {
     const createOptions: DropdownOption[] = [
         {value: 'School', label: 'School'},

@@ -10,7 +10,8 @@ interface DropdownProps {
     onSelect: (value: string) => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({options, onSelect}) => {
+function Dropdown(props: DropdownProps) {
+    let {options, onSelect} = props;
     const [selectedValue, setSelectedValue] = useState('');
 
     const handleSelect = (value: string) => {
@@ -25,6 +26,6 @@ const Dropdown: React.FC<DropdownProps> = ({options, onSelect}) => {
             ))}
         </select>
     );
-};
+}
 
 export default Dropdown;
