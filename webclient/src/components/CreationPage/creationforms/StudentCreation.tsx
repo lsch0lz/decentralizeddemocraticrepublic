@@ -1,6 +1,32 @@
 import React, {useState} from "react";
-import { v4 as uuidv4 } from 'uuid';
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
+import schoolContract from "../../../contracts/School.json";
+import Web3 from "web3";
+
+const contractABI = schoolContract.abi;
+const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
+
+const ganacheUrl = 'HTTP://127.0.0.1:7545';
+const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
+const web3 = new Web3(httpProvider);
+
+// @ts-ignore
+const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+
+const createStudent = async (classId: number, studentName: string, studentId: number, studentPassword: string) => {
+    try {
+        const accounts = await web3.eth.getAccounts();
+        console.log('accounts:', accounts)
+        return await contractInstance.methods.addStudentToClass(
+            classId,
+            studentName,
+            studentId,
+            studentPassword
+        ).send({from: accounts[0]})
+    } catch (error) {
+        console.error('Failed to create school:', error);
+    }
+};
 
 export function StudentCreation() {
     const [studentName, setStudentName] = useState('');
@@ -21,10 +47,18 @@ export function StudentCreation() {
 
     const saveToChain = () => {
         // TODO: Save to chain
-        const studentId = uuidv4()
+        const studentId = 1
         // TODO: hash password
-        const hashedPassword = studentPassword
-        console.log('Saving to chain! Need to be implemented');
+        createStudent(
+            1,
+            studentName,
+            studentId,
+            studentPassword
+        ).then(r =>
+            console.log('Student created:', r)
+        ).catch(e =>
+            console.log('Failed to create student:', e)
+        )
     }
 
     return (

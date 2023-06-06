@@ -18,8 +18,7 @@ const createSchool = async (name: string) => {
     try {
         const accounts = await web3.eth.getAccounts();
         console.log('accounts:', accounts)
-        const result = await contractInstance.methods.createSchool(name).send({from: accounts[0]});
-        console.log('School created:', result);
+        return await contractInstance.methods.createSchool(name).send({from: accounts[0]});
     } catch (error) {
         console.error('Failed to create school:', error);
     }
@@ -35,7 +34,10 @@ function SchoolCreation() {
     const saveToChain = () => {
         createSchool(schoolName).then(() => {
             console.log('School created');
-        })
+        }).catch(e => {
+                console.log('Failed to create school:', e)
+            }
+        )
     }
 
     return (

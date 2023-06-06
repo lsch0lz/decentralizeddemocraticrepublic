@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
 import schoolContract from "../../../contracts/School.json";
 import Web3 from "web3";
-import {v4 as uuidv4} from "uuid";
 
 
 const contractABI = schoolContract.abi;
@@ -20,8 +19,7 @@ const createClass = async (classId: number, name: string) => {
     try {
         const accounts = await web3.eth.getAccounts();
         console.log('accounts:', accounts)
-        const result = await contractInstance.methods.createClass(classId, name).send({from: accounts[0]});
-        console.log('School created:', result);
+        return await contractInstance.methods.createClass(classId, name).send({from: accounts[0]});
     } catch (error) {
         console.error('Failed to create school:', error);
     }
@@ -40,6 +38,8 @@ export function ClassCreation() {
         const classId = 1
         createClass(classId, className).then(() => {
             console.log('Class created');
+        }).catch(e => {
+            console.log('Failed to create class:', e)
         })
     }
 
