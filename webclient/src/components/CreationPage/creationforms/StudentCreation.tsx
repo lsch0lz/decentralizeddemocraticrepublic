@@ -1,9 +1,11 @@
 import React, {useState} from "react";
 import { v4 as uuidv4 } from 'uuid';
+import {CustomFormLabel} from "../customInput/CustomFormLabel";
 
 export function StudentCreation() {
     const [studentName, setStudentName] = useState('');
     const [studentPassword, setStudentPassword] = useState('');
+    const [classId, setClassId] = useState('');
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStudentName(e.target.value);
@@ -11,6 +13,10 @@ export function StudentCreation() {
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStudentPassword(e.target.value);
+    };
+
+    const handleClassIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setClassId(event.target.value);
     };
 
     const saveToChain = () => {
@@ -24,14 +30,24 @@ export function StudentCreation() {
     return (
         <div className="SchoolCreation">
             <form onSubmit={saveToChain}>
-                <label>
-                    Student Name:
-                    <input type="text" value={studentName} onChange={handleNameChange}/>
-                </label>
-                <label>
-                    Student Password:
-                    <input type="text" value={studentPassword} onChange={handlePasswordChange}/>
-                </label>
+                <CustomFormLabel
+                    label={"Student Name"}
+                    type="text"
+                    value={studentName}
+                    onChange={handleNameChange}
+                />
+                <CustomFormLabel
+                    label={"Student Password"}
+                    type="text"
+                    value={studentPassword}
+                    onChange={handlePasswordChange}
+                />
+                <CustomFormLabel
+                    label={"Class ID (TODO: Render class info here)"} // TODO
+                    type="text"
+                    value={classId}
+                    onChange={handleClassIdChange}
+                />
                 <button type="submit">Add Student to School</button>
             </form>
         </div>

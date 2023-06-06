@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {CustomFormLabel} from "../customInput/CustomFormLabel";
 
 interface OptionsFormProps {
     onSubmit: (options: string[]) => void;
@@ -39,16 +40,20 @@ export function ElectionCreation() {
     return (
         <div className="ElectionCreation">
             <form onSubmit={saveToChain}>
-                <label>
-                    Election Name:
-                    <input type="text" value={electionName} onChange={handleElectionNameChange}/>
-                </label>
-                <label>
-                    Add Option:
-                    <input type="text" value={option} onChange={handleOptionChange} />
-                </label>
+                <CustomFormLabel
+                    label={"Election Name"}
+                    type="text"
+                    value={electionName}
+                    onChange={handleElectionNameChange}
+                />
+                <CustomFormLabel
+                    label={"Add Option"}
+                    type="text"
+                    value={option}
+                    onChange={handleOptionChange}
+                />
                 <button type="button" onClick={handleAddOption}>
-                    Add
+                    Add Option
                 </button>
                 <ul>
                     {optionsList.map((opt, index) => (

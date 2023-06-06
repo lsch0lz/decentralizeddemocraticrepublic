@@ -3,7 +3,7 @@ import './CreationPage.css';
 import Dropdown, {DropdownOption} from "./dropdown/Dropdown";
 import SchoolCreation from "./creationforms/SchoolCreation";
 import {ClassCreation} from "./creationforms/ClassCreation";
-import {TeacherCreation} from "./creationforms/TecherCreation";
+import {TeacherCreation} from "./creationforms/TeacherCreation";
 import {StudentCreation} from "./creationforms/StudentCreation";
 import {ElectionCreation} from "./creationforms/ElectionCreation";
 

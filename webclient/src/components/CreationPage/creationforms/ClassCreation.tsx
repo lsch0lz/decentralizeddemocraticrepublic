@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {CustomFormLabel} from "../customInput/CustomFormLabel";
 
 export function ClassCreation() {
     const [className, setClassName] = useState('');
@@ -15,10 +16,12 @@ export function ClassCreation() {
     return (
         <div className="ClassCreation">
             <form onSubmit={saveToChain}>
-                <label>
-                    Class Name
-                    <input type="text" value={className} onChange={handleNameChange}/>
-                </label>
+                <CustomFormLabel
+                    label={"Class Name"}
+                    type="text"
+                    value={className}
+                    onChange={handleNameChange}
+                />
                 <button type="submit">Create Class</button>
             </form>
         </div>

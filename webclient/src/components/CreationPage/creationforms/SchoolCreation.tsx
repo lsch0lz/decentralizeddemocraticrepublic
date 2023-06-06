@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './SchoolCreation.css';
 import schoolContract from "../../../contracts/School.json";
 import Web3 from "web3";
+import {CustomFormLabel} from "../customInput/CustomFormLabel";
 
 const contractABI = schoolContract.abi;
 const contractAddress = '0x73542BC7E1925ce59Fa149DdF06111b49D6982FA'; // Replace with your contract address
@@ -27,7 +28,7 @@ const createSchool = async (name: string) => {
 function SchoolCreation() {
     const [schoolName, setSchoolName] = useState('');
 
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSchoolNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSchoolName(e.target.value);
     };
 
@@ -40,10 +41,13 @@ function SchoolCreation() {
     return (
         <div className="SchoolCreation">
             <form onSubmit={saveToChain}>
-                <label>
-                    School Name
-                    <input type="text" value={schoolName} onChange={handleNameChange}/>
-                </label>
+                <CustomFormLabel
+                    label={"School Name"}
+                    type="text"
+                    value={schoolName}
+                    onChange={handleSchoolNameChange}
+                />
+
                 <button type="submit">Create School</button>
             </form>
         </div>
