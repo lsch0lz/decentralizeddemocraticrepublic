@@ -45,7 +45,7 @@ export function TeacherCreation() {
         const teacherId = 1
 
         createTeacher(
-            1,
+            Number(classId),
             teacherName,
             teacherId
         ).then(r =>

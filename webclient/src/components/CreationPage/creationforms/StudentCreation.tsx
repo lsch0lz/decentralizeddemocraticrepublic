@@ -50,7 +50,7 @@ export function StudentCreation() {
         const studentId = 1
         // TODO: hash password
         createStudent(
-            1,
+            Number(classId),
             studentName,
             studentId,
             studentPassword
