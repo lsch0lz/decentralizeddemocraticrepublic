@@ -5,7 +5,7 @@ import Web3 from "web3";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
 
 const contractABI = schoolContract.abi;
-const contractAddress = '0x73542BC7E1925ce59Fa149DdF06111b49D6982FA'; // Replace with your contract address
+const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
 
 const ganacheUrl = 'HTTP://127.0.0.1:7545';
 const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
