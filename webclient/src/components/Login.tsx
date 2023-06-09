@@ -1,42 +1,54 @@
 import React, { useState } from 'react';
 import Web3 from "web3";
-import schoolContract from "../contracts/School.json";
-
+import schoolContract from "./../contracts/School.json";
 
 const contractABI = schoolContract.abi;
-const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
+const contractAddress = '0xcC61571394147db42501b6B450d64EBC2A04BDff'; // Replace with your contract address
 
 const ganacheUrl = 'HTTP://127.0.0.1:7545';
 const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
 const web3 = new Web3(httpProvider);
 
+// @ts-ignore
+const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
 
 const log_in = async (studentName: string, password: string) => {
     try {
+        const accounts = await web3.eth.getAccounts();
+        console.log('accounts:', accounts);
         return await contractInstance.methods.log_in(
             studentName,
             password
-        ).call()
+        ).send({from: accounts[0]}).then(function (result: any){
+            console.log("result in function", result);
+        });
     } catch (error) {
         console.error('Failed to log in:', error);
     }
 };
 
-// @ts-ignore
-const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
-
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState(false);
 
     const handleLogin = () => {
-        // Check if username and password match the value from App.tsx
-        log_in(username, password).then((value) => {
-            console.log('value:', value)
+        const result = log_in(username, password).then(function (result: any){
+            console.log("result in page", result);
+        });
+        console.log("result outside page", result);
+        log_in(username, password).then(([success, role]) => {
+            if (success) {
+                // User logged in successfully
+                console.log('Login successful. Role:', role);
+            } else {
+                // Invalid username or password
+                console.log('Invalid username or password');
+                setLoginError(true);
+            }
         }).catch(e => {
-            console.log('Failed to log in:', e)
-        })
+            console.log('Failed to log in:', e);
+        });
     };
 
     return (
