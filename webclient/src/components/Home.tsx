@@ -9,7 +9,8 @@ const contractAddress = '0xd1AC383418Dd8c17577b647dBDbEd4E473E7bf49'; // Replace
 const web3 = new Web3(Web3.givenProvider);
 // @ts-ignore
 const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
-const Home: React.FC = () => {
+
+function Home() {
     let [value, setValue] = useState<String>()
 
     contractInstance.methods.getString().call()
