@@ -15,29 +15,28 @@ const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
 const log_in = async (studentName: string, password: string) => {
     try {
         const accounts = await web3.eth.getAccounts();
-        console.log('accounts:', accounts);
-        return await contractInstance.methods.log_in(
-            studentName,
-            password
-        ).send({from: accounts[0]}).then(function (result: any){
-            console.log("result in function", result);
+        console.log("log in", studentName, password)
+        console.log("accounts", accounts);
+        return await contractInstance.methods
+            .log_in(studentName, password)
+            .send({ from: accounts[0] })
+            .then(function(result: any){
+                console.log("result", result);
         });
     } catch (error) {
-        console.error('Failed to log in:', error);
+        console.error('Failed to get login data:', error);
+        throw error;
     }
 };
-
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState(false);
 
-    const handleLogin = () => {
-        const result = log_in(username, password).then(function (result: any){
-            console.log("result in page", result);
-        });
-        console.log("result outside page", result);
-        log_in(username, password).then(([success, role]) => {
+    const handleLogin = async () => {
+        try {
+            const [success, role] = await log_in(username, password);
+            console.log("results", success, role);
             if (success) {
                 // User logged in successfully
                 console.log('Login successful. Role:', role);
@@ -46,9 +45,9 @@ const LoginPage = () => {
                 console.log('Invalid username or password');
                 setLoginError(true);
             }
-        }).catch(e => {
-            console.log('Failed to log in:', e);
-        });
+        } catch (error) {
+            console.log('Failed to log in:', error);
+        }
     };
 
     return (
