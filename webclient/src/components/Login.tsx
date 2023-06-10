@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Web3 from "web3";
+import { useCookies } from "react-cookie";
 import schoolContract from "../contracts/School.json";
 
 
@@ -29,14 +30,27 @@ const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState(false);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+    const [cookies, setCookie] = useCookies(['username', 'password', 'role']);
 
     const handleLogin = () => {
         // Check if username and password match the value from App.tsx
-        log_in(username, password).then((value) => {
-            console.log('value:', value)
-        }).catch(e => {
-            console.log('Failed to log in:', e)
-        })
+        if (username === 'example' && password === 'password') {
+            // Successful login
+            console.log('Login successful');
+            setShowSuccessMessage(true);
+            setLoginError(false);
+            // Perform additional actions or redirect to another page
+            // Set the session cookie with the "username" and "password" values
+            setCookie('username', username, { path: '/' });
+            setCookie('password', password, { path: '/' });
+            setCookie('role', 'student', { path: '/' });
+        } else {
+            // Failed login
+            console.log('Login failed');
+            setLoginError(true);
+        }
     };
 
     return (
@@ -61,7 +75,14 @@ const LoginPage: React.FC = () => {
                 />
             </div>
             {loginError && <p style={{ color: 'red' }}>Invalid username or password</p>}
-
+            {showSuccessMessage && (
+                <div style={{ color: 'green' }}>
+                    <p>Correct Password</p>
+                    <p>Username: {cookies.username}</p>
+                    <p>Role: {cookies.password}</p>
+                    <p>Role: {cookies.role}</p>
+                </div>
+            )}
             <button onClick={handleLogin}>Login</button>
         </div>
     );
