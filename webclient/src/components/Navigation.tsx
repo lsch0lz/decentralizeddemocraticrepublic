@@ -1,16 +1,24 @@
 import React from 'react';
 
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
-const Navigation = () => {
+export interface NavLinkItem {
+    text: string;
+    path: string;
+}
+
+interface NavigationProps {
+    navLinks: NavLinkItem[];
+}
+
+const Navigation = ({navLinks}: { navLinks: NavLinkItem[] }) => {
     return (
         <div>
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/contact">Contact</NavLink>
-            <NavLink to="/login">Login</NavLink>
+            {navLinks.map(({text, path}) => (
+                <NavLink key={path} to={path}>{text}</NavLink>
+            ))}
         </div>
     );
-}
+};
 
 export default Navigation;
