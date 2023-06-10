@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Web3 from "web3";
-import { useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 import schoolContract from "../contracts/School.json";
 
 
@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
     const [loginError, setLoginError] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    const [cookies, setCookie] = useCookies(['username', 'password']);
+    const [cookies, setCookie] = useCookies(['username', 'password', 'role']);
 
     const handleLogin = () => {
         // Check if username and password match the value from App.tsx
@@ -45,6 +45,7 @@ const LoginPage: React.FC = () => {
             // Set the session cookie with the "username" and "password" values
             setCookie('username', username, { path: '/' });
             setCookie('password', password, { path: '/' });
+            setCookie('role', 'student', { path: '/' });
         } else {
             // Failed login
             console.log('Login failed');
@@ -78,7 +79,8 @@ const LoginPage: React.FC = () => {
                 <div style={{ color: 'green' }}>
                     <p>Correct Password</p>
                     <p>Username: {cookies.username}</p>
-                    <p>Password: {cookies.password}</p>
+                    <p>Role: {cookies.password}</p>
+                    <p>Role: {cookies.role}</p>
                 </div>
             )}
             <button onClick={handleLogin}>Login</button>
