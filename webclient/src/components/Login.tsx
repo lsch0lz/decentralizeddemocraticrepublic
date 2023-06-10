@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import lorenIpsumContract from "../contracts/StringContract.json";
 import Web3 from "web3";
 import { useCookies} from "react-cookie";
+import schoolContract from "../contracts/School.json";
 
 
-const contractABI = lorenIpsumContract.abi;
-const contractAddress = '0xd1AC383418Dd8c17577b647dBDbEd4E473E7bf49'; // Replace with your contract address
+const contractABI = schoolContract.abi;
+const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
 
-const web3 = new Web3(Web3.givenProvider);
+const ganacheUrl = 'HTTP://127.0.0.1:7545';
+const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
+const web3 = new Web3(httpProvider);
+
+
+const log_in = async (studentName: string, password: string) => {
+    try {
+        return await contractInstance.methods.log_in(
+            studentName,
+            password
+        ).call()
+    } catch (error) {
+        console.error('Failed to log in:', error);
+    }
+};
+
 // @ts-ignore
 const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
-
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -18,23 +32,11 @@ const LoginPage: React.FC = () => {
     const [loginError, setLoginError] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    // get password from contract
-    let [value, setValue] = useState<String>()
-
-    contractInstance.methods.getString().call()
-        .then((result: any) => {
-            setValue(result)
-        })
-        .catch((error: any) => {
-            setValue("error: ${error}")
-            console.error(error);
-        });
-
     const [cookies, setCookie] = useCookies(['username', 'password']);
 
     const handleLogin = () => {
         // Check if username and password match the value from App.tsx
-        if (username === 'example' && password === value) {
+        if (username === 'example' && password === 'password') {
             // Successful login
             console.log('Login successful');
             setShowSuccessMessage(true);
