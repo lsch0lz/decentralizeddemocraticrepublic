@@ -28,7 +28,7 @@ contract School {
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
     
     function createSchool(string memory _name) public {
-        require(schools[msg.sender].principal == address(0), "School already exists");  // Check if school already exists
+        require(schools[msg.sender].principal == address(0), "This address already has a school assigned to it");  // Check if school already exists ==> Nein, implizit nur eine Schule pro Adresse (Principal) erlaubt!
         schools[msg.sender].name = _name;  // Set the school's name
         schools[msg.sender].principal = msg.sender;  // Set the caller's address as the principal
     }
