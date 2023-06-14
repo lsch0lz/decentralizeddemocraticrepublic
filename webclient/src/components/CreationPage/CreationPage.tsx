@@ -6,7 +6,7 @@ import {ClassCreation} from "./creationforms/ClassCreation";
 import {TeacherCreation} from "./creationforms/TeacherCreation";
 import {StudentCreation} from "./creationforms/StudentCreation";
 import {ElectionCreation} from "./creationforms/ElectionCreation";
-import RoleContext from "../RoleContext";
+import RoleContext, {Role} from "../RoleContext";
 
 
 function CreationPage() {
@@ -30,11 +30,11 @@ function CreationPage() {
         {value: 'Election', label: 'Election'}
     ].filter((option) => {
         switch (currentRole) {
-            case 'Principal':
+            case Role.Principal:
                 return true;
-            case 'Teacher':
+            case Role.Teacher:
                 return teacherOptions.includes(option.value);
-            case 'Student':
+            case Role.Student:
                 return studentOptions.includes(option.value);
             default:
                 return false;
