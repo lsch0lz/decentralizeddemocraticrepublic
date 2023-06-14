@@ -1,13 +1,12 @@
-import React, {useState} from "react";
-import {CustomFormLabel} from "../customInput/CustomFormLabel";
+import React, { useState } from 'react';
+import { CustomFormLabel } from '../customInput/CustomFormLabel';
+import './ElectionCreation.css';
 
 interface OptionsFormProps {
     onSubmit: (options: string[]) => void;
 }
 
-
 export function ElectionCreation() {
-
     const [electionName, setElectionName] = useState('');
 
     const handleElectionNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,22 +31,24 @@ export function ElectionCreation() {
             setOption('');
         }
     };
-    const saveToChain = () => {
+
+    const saveToChain = (e: React.FormEvent) => {
+        e.preventDefault();
         // TODO: Save to chain
         console.log('Saving to chain! Need to be implemented');
-    }
+    };
 
     return (
         <div className="ElectionCreation">
             <form onSubmit={saveToChain}>
                 <CustomFormLabel
-                    label={"Election Name"}
+                    label="Election Name"
                     type="text"
                     value={electionName}
                     onChange={handleElectionNameChange}
                 />
                 <CustomFormLabel
-                    label={"Add Option"}
+                    label="Add Option"
                     type="text"
                     value={option}
                     onChange={handleOptionChange}

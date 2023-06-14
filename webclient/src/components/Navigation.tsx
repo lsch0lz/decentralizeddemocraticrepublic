@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {NavLink} from 'react-router-dom';
+import './Navigation.css';
 
 export interface NavLinkItem {
     text: string;
@@ -13,9 +14,9 @@ interface NavigationProps {
 
 const Navigation = ({navLinks}: { navLinks: NavLinkItem[] }) => {
     return (
-        <div>
+        <div className="nav-container">
             {navLinks.map(({text, path}) => (
-                <NavLink key={path} to={path}>{text}</NavLink>
+                <NavLink key={path} to={path} className="nav-link">{text}</NavLink>
             ))}
         </div>
     );
