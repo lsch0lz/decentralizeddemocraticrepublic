@@ -45,8 +45,9 @@ async function getSchoolTest(fromAccount){
 const schoolName = "Hogwarts";
 const account = "0x648bCC2d8725EE8c79AE29a836eF5321DDBfbF9b";
 
-describe('[Test] Create and Read School', function (){
+describe('[Test] School', function (){
   it('Create School', async function (){
+    console.log("(Is only possible the first time)")
     await createSchoolTest(schoolName, account)
   });
 
@@ -54,6 +55,17 @@ describe('[Test] Create and Read School', function (){
     const res = await getSchoolTest(account);
     expect(res).to.equal(schoolName)
   });
+});
+
+describe('[Test] Class', async () =>{
+  const instance = await SchoolsContract.deployed();
+  it('Create Class', async () => {
+    await instance.createClass(0, '7a', {from: fromAccount });
+  });
+
+  // it('Read Class', async () => {
+  //   await instance.getClassDetail()
+  // });
 });
 
 
