@@ -26,7 +26,9 @@ contract School {
     }
     
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
-    
+
+
+    // CREATE
     function createSchool(string memory _name) public {
         require(schools[msg.sender].principal == address(0), "This address already has a school assigned to it");  // Check if school already exists ==> Nein, implizit nur eine Schule pro Adresse (Principal) erlaubt!
         schools[msg.sender].name = _name;  // Set the school's name
@@ -53,7 +55,9 @@ contract School {
         require(school.classes[_classId].teachers.length > 0, "Class does not exist");  // Check if class exists
         school.classes[_classId].students.push(Student(_studentName, _password, _studentId));  // Add student to the class
     }
-    
+
+
+    // READ
     function getSchoolName() public view returns (string memory) {
         return schools[msg.sender].name;  // Get the name of the school
     }

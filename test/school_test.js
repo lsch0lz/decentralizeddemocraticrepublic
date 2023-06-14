@@ -1,5 +1,6 @@
 const Web3 = require('web3');
 const contract = require('truffle-contract');
+const {context} = require("@truffle/contract/webpack.config");
 const expect = require('chai').expect
 
 let schoolsContractJson;
@@ -74,6 +75,13 @@ describe('Tests for School Contract', () => {
       expect(res[0]).to.equal(class_name);
     });
   });
+
+  // context('[Test] Teacher', () => {
+  //   it('Create Teacher', async () => {
+  //     const instance = await SchoolsContract.deployed();
+  //     await instance.addTeacherToClass(class_id, teacher_name,{from: account })
+  //   });
+  // });
 });
 
 
