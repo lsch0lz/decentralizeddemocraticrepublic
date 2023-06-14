@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {MyContextProvider} from "./components/RoleContext";
+import {RoleContextProvider} from "./components/RoleContext";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
-    <MyContextProvider>
+    <RoleContextProvider>
         <App/>
-    </MyContextProvider>,
+    </RoleContextProvider>,
     rootElement
 );
 

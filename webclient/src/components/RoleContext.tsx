@@ -6,17 +6,17 @@ export enum Role {
     Principal = 'Principal',
 }
 
-interface MyContextType {
+interface RoleContextType {
     currentRole: Role | null
     setCurrentRole: (value: Role | null) => void;
 }
 
-const RoleContext = createContext<MyContextType>({
+const RoleContext = createContext<RoleContextType>({
     currentRole: null,
     setCurrentRole: () => {},
 });
 
-export function MyContextProvider(props: { children: any; }) {
+export function RoleContextProvider(props: { children: any; }) {
     let {children} = props;
     const [currentRole, setCurrentRole] = useState<Role | null>(null);
 
