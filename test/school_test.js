@@ -41,32 +41,60 @@ async function getSchoolTest(fromAccount){
 }
   
 
-// Usage example
-const schoolName = "Hogwarts";
+// Your Account
 const account = "0x648bCC2d8725EE8c79AE29a836eF5321DDBfbF9b";
 
-describe('[Test] School', function (){
-  it('Create School', async function (){
-    console.log("(Is only possible the first time)")
-    await createSchoolTest(schoolName, account)
+describe('Tests for School Contract', () => {
+  const schoolName = "Hogwarts";
+  const class_id = 0;
+  const class_name = '7a';
+
+  context('[Test] School', () => {
+    it('Create School (Is only possible the first time)', async () => {
+      await createSchoolTest(schoolName, account)
+    });
+
+    it('Read School from Blockchain', async () => {
+      const res = await getSchoolTest(account);
+      expect(res).to.equal(schoolName)
+    });
   });
 
-  it('Check for School on Blockchain', async function () {
-    const res = await getSchoolTest(account);
-    expect(res).to.equal(schoolName)
+
+  context('[Test] Class', () =>{
+    it('Create Class', async () => {
+      const instance = await SchoolsContract.deployed();
+      await instance.createClass(class_id, class_name, {from: account });
+    });
+
+    it('Read Class from Blockchain', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.getClassDetails(class_id, {from: account });
+      // See note below to understand the returned object
+      expect(res[0]).to.equal(class_name);
+    });
   });
 });
 
-describe('[Test] Class', async () =>{
-  const instance = await SchoolsContract.deployed();
-  it('Create Class', async () => {
-    await instance.createClass(0, '7a', {from: fromAccount });
-  });
-
-  // it('Read Class', async () => {
-  //   await instance.getClassDetail()
-  // });
-});
 
 
+// Note: Result from
+// const res = await instance.getClassDetails(0, {from: account });
+// console.log(res)
+//
+// Result {
+//   '0': '7a',
+//       '1': BN {
+//     negative: 0,
+//         words: [ 0, <1 empty item> ],
+//     length: 1,
+//         red: null
+//   },
+//   '2': BN {
+//     negative: 0,
+//         words: [ 0, <1 empty item> ],
+//     length: 1,
+//         red: null
+//   }
+// }
 
