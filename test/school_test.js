@@ -63,11 +63,13 @@ describe('School creating (And Reading) Test', function (){
   });
 
   it('Check for School on Blockchain', function () {
+    let res = 0;
     getSchoolTest(account).then((result) => {
-      expect(result).to.equal(schoolName)
+      res = result;
     }).catch((error) => {
       console.error(error);
     });
+    expect(res).to.equal(schoolName)
   });
 });
 
