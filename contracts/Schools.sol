@@ -32,7 +32,8 @@ contract School {
         uint voteCount;
     }
 
-    Election[] public elections;
+    // Election[] public elections;
+    mapping(uint => Election) public elections;
 
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
 
@@ -87,50 +88,19 @@ contract School {
         // Get the class details (name, number of teachers, number of students)
     }
 
-    function log_in(string memory _studentName, string memory _password) public view returns (bool) {
-        SchoolData storage school = schools[msg.sender];
-        uint256 classCount = 0;
-        for (uint256 i = 0; i < 1000000; i++) {// Assuming the maximum number of classes is 1,000,000
-            if (school.classes[i].teachers.length > 0) {
-                classCount++;
-            } else {
-                break;
-            }
-        }
-
-        for (uint256 i = 0; i < classCount; i++) {
-            Student[] storage students = school.classes[i].students;
-            for (uint256 j = 0; j < students.length; j++) {
-                if (
-                    keccak256(bytes(students[j].name)) == keccak256(bytes(_studentName)) &&
-                    keccak256(bytes(students[j].password)) == keccak256(bytes(_password))
-                ) {
-                    return true;
-                    // Found the student
-                }
-            }
-        }
-
-        return false;
-        // Student not found
-    }
-
     function createElection(string memory electionName, string[] memory electionOptions) public {
-        // Create an election
-        elections.push(Election(electionName, electionOptions, 0));
-
+        elections[1] = Election(electionName, electionOptions, 0);
     }
 
-    function getElection(string memory electionName) public view returns (string memory, string[] memory, uint) {
-        for (uint i = 0; i < elections.length; i++) {
-            if (keccak256(bytes(elections[i].name)) == keccak256(bytes(electionName))) {
-                require(i < elections.length, "Invalid index");
+    function vote(uint electionID) public {
+        Election storage election = elections[1];
+        election.voteCount += 1;
+    }
 
-                Election storage election = elections[i];
-                return (election.name, election.options, election.voteCount);
-            }
-        }
-        revert("Election not found");
+
+    function getVotes(uint electionID) public view returns (uint) {
+        Election storage election = elections[1];
+        return election.voteCount;
     }
 
 }

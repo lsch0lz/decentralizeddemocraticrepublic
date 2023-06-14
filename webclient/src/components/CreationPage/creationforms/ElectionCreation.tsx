@@ -31,13 +31,23 @@ const createElection = async (electionName: string, options: string[]) => {
     }
 }
 
-const getElection = async (electionName: string) => {
+const getVotes = async (electionID: number) => {
     try {
-        console.log('Getting election with name:', electionName)
-        const result = await contractInstance.methods.getElection(electionName).call()
+        console.log('Getting votes for election with ID:', electionID)
+        const result = await contractInstance.methods.getVotes(electionID).call()
         return result;
     } catch (error) {
-        console.error('Failed to get election:', error);
+        console.error('Failed to get votes:', error);
+    }
+}
+
+const vote = async (electionID: number) => {
+    try {
+        console.log('Voting for election with ID:', electionID)
+        const result = await contractInstance.methods.vote(electionID).call()
+        return result;
+    } catch (error) {
+        console.error('Failed to vote:', error);
     }
 }
 
@@ -76,44 +86,41 @@ export function ElectionCreation() {
         await createElection(electionName, optionsList);
         console.log("Saved election to chain", electionName)
         console.log("Getting election from chain", electionName)
-        const result = await getElection(electionName);
-        if (result && result[0]) {
-            console.log('Got election from chain', result);
-        } else {
-            console.log('Election not found');
-        }
+        await vote(1);
+        const result = await getVotes(1);
+        console.log("Got election from chain", result)
     };
 
-    return (
-        <div className="ElectionCreation">
-            <form onSubmit={saveToChain}>
-                <CustomFormLabel
-                    label="Election Name"
-                    type="text"
-                    value={electionName}
-                    onChange={handleElectionNameChange}
-                />
-                <CustomFormLabel
-                    label="Add Option"
-                    type="text"
-                    value={option}
-                    onChange={handleOptionChange}
-                />
-                <button type="button" onClick={handleAddOption}>
-                    Add Option
-                </button>
-                <ul>
-                    {optionsList.map((opt, index) => (
-                        <li key={index}>
-                            {opt}
-                            <button type="button" onClick={() => handleRemoveOption(index)}>
-                                Remove
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-                <button type="submit">Create Election</button>
-            </form>
-        </div>
-    );
-}
+        return (
+            <div className="ElectionCreation">
+                <form onSubmit={saveToChain}>
+                    <CustomFormLabel
+                        label="Election Name"
+                        type="text"
+                        value={electionName}
+                        onChange={handleElectionNameChange}
+                    />
+                    <CustomFormLabel
+                        label="Add Option"
+                        type="text"
+                        value={option}
+                        onChange={handleOptionChange}
+                    />
+                    <button type="button" onClick={handleAddOption}>
+                        Add Option
+                    </button>
+                    <ul>
+                        {optionsList.map((opt, index) => (
+                            <li key={index}>
+                                {opt}
+                                <button type="button" onClick={() => handleRemoveOption(index)}>
+                                    Remove
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <button type="submit">Create Election</button>
+                </form>
+            </div>
+        );
+    }
