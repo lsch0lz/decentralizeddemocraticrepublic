@@ -41,7 +41,7 @@ async function createSchoolTest(name, fromAccount) {
 
 async function getSchoolTest(fromAccount){
   const instance = await SchoolsContract.deployed();
-  const result = await instance.getSchoolName(fromAccount);
+  const result = await instance.getSchoolName(fromAccount); // TODO Hier Bug
 
   return result;
 }
