@@ -1,9 +1,7 @@
 import React, {useContext, useState} from 'react';
 import Web3 from "web3";
-import {useCookies} from "react-cookie";
 import schoolContract from "../contracts/School.json";
 import RoleContext, {Role} from "./RoleContext";
-
 
 const contractABI = schoolContract.abi;
 const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
@@ -33,7 +31,6 @@ export const LoginPage: React.FC = () => {
     const [loginError, setLoginError] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    const [cookies, setCookie] = useCookies(['username', 'password', 'role']);
     const {currentRole, setCurrentRole} = useContext(RoleContext);
 
 
@@ -44,11 +41,6 @@ export const LoginPage: React.FC = () => {
             console.log('Login successful');
             setShowSuccessMessage(true);
             setLoginError(false);
-            // Perform additional actions or redirect to another page
-            // Set the session cookie with the "username" and "password" values
-            setCookie('username', username, {path: '/'});
-            setCookie('password', password, {path: '/'});
-            setCookie('role', 'student', {path: '/'});
             setCurrentRole(Role.Student)
         } else {
             // Failed login
@@ -82,9 +74,6 @@ export const LoginPage: React.FC = () => {
             {showSuccessMessage && (
                 <div style={{color: 'green'}}>
                     <p>Correct Password</p>
-                    <p>Username: {cookies.username}</p>
-                    <p>Role: {cookies.password}</p>
-                    <p>Role: {cookies.role}</p>
                     <p>Role: {currentRole}</p>
                 </div>
             )}

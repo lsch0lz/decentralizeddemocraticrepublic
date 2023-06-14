@@ -7,7 +7,6 @@ import About from "./components/About";
 import Error from "./components/Error";
 import Navigation, {NavLinkItem} from "./components/Navigation";
 import CreationPage from "./components/CreationPage/CreationPage";
-import {MyContextProvider} from "./components/RoleContext";
 
 
 function App() {
@@ -21,20 +20,18 @@ function App() {
     ];
 
     return (
-        <MyContextProvider>
-            <Router>
-                <div>
-                    <Navigation navLinks={navLinks}/>
-                    <Routes>
-                        <Route path="/" Component={Home}/>
-                        <Route path="/create" Component={CreationPage}/>
-                        <Route path="/about" Component={About}/>
-                        <Route path="/login" Component={Login}/>
-                        <Route path="*" Component={Error}/>
-                    </Routes>
-                </div>
-            </Router>
-        </MyContextProvider>
+        <Router>
+            <div>
+                <Navigation navLinks={navLinks}/>
+                <Routes>
+                    <Route path="/" Component={Home}/>
+                    <Route path="/create" Component={CreationPage}/>
+                    <Route path="/about" Component={About}/>
+                    <Route path="/login" Component={Login}/>
+                    <Route path="*" Component={Error}/>
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
