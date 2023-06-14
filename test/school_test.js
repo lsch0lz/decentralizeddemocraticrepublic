@@ -35,17 +35,17 @@ async function createSchoolTest(name, fromAccount) {
 
 async function getSchoolTest(fromAccount){
   const instance = await SchoolsContract.deployed();
-  const result = await instance.getSchoolName(fromAccount); // TODO Hier Bug
+  const result = await instance.getSchoolName({from: fromAccount });
 
   return result;
 }
   
 
 // Usage example
-const schoolName = "sdfsdf";
-const account = "0x993D35AB34ac41D6c836f25BB40c3FAB4cEEbecb";
+const schoolName = "Hogwarts";
+const account = "0x648bCC2d8725EE8c79AE29a836eF5321DDBfbF9b";
 
-describe('School creating (And Reading) Test', function (){
+describe('[Test] Create and Read School', function (){
   it('Create School', async function (){
     await createSchoolTest(schoolName, account)
   });
