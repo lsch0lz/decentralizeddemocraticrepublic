@@ -67,6 +67,37 @@ contract School {
         Class storage class = school.classes[_classId];
         return (class.name, class.teachers.length, class.students.length);  // Get the class details (name, number of teachers, number of students)
     }
+//
+//    function getAllClassNames() public view returns (bytes32[] memory) {
+//        SchoolData storage school = schools[msg.sender];
+//        uint256 classCount = 0;
+//        for (uint256 i = 0; i < 1000000; i++) { // Assuming the maximum number of classes is 1,000,000
+//            if (school.classes[i].teachers.length > 0) {
+//                classCount++;
+//            } else {
+//                break;
+//            }
+//        }
+//
+//        bytes32[] memory classNames = new bytes32[](classCount);
+//        for (uint256 i = 0; i < classCount; i++) {
+//            classNames[i] = stringToBytes32(school.classes[i].name);
+//        }
+//
+//        return classNames;
+//    }
+//
+//    function stringToBytes32(string memory source) public pure returns (bytes32 result) {
+//        bytes memory tempEmptyStringTest = bytes(source);
+//        if (tempEmptyStringTest.length == 0) {
+//            return 0x0;
+//        }
+//
+//        assembly {
+//            result := mload(add(source, 32))
+//        }
+//    }
+
 
     function log_in(string memory _studentName, string memory _password) public view returns (bool) {
         SchoolData storage school = schools[msg.sender];

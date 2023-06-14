@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 const contract = require('truffle-contract');
-const {context} = require("@truffle/contract/webpack.config");
+// const {context} = require("@truffle/contract/webpack.config");
 const expect = require('chai').expect
 
 let schoolsContractJson;
@@ -43,12 +43,12 @@ async function getSchoolTest(fromAccount){
   
 
 // Your Account
-const account = "0x648bCC2d8725EE8c79AE29a836eF5321DDBfbF9b";
+const account = "0xB3e64C2a561cDBc146332991ccBAf92F5519fFa7";
 
 describe('Tests for School Contract', () => {
-  const schoolName = "Hogwarts";
-  const class_id = 0;
-  const class_name = '7a';
+  const schoolName = "Hauptschulä";
+  const class_name = '8a';
+  const class_id = 420;
 
   context('[Test] School', () => {
     it('Create School (Is only possible the first time)', async () => {
@@ -74,6 +74,13 @@ describe('Tests for School Contract', () => {
       // See note below to understand the returned object
       expect(res[0]).to.equal(class_name);
     });
+
+    // it('Read List of all classes', async () => {
+    //   const instance = await SchoolsContract.deployed();
+    //   const res = await instance.getAllClassNames({from: account });
+    //   expect(res[0]).to.be.an('array');
+    //   expect(res[0]).to.include(class_name)
+    // });
   });
 
   // context('[Test] Teacher', () => {
