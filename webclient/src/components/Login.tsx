@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import Web3 from "web3";
-import { useCookies } from "react-cookie";
 import schoolContract from "../contracts/School.json";
-
+import RoleContext, {Role} from "./RoleContext";
+import './LoginPage.css';
 
 const contractABI = schoolContract.abi;
 const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
@@ -26,13 +26,14 @@ const log_in = async (studentName: string, password: string) => {
 // @ts-ignore
 const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
 
-const LoginPage: React.FC = () => {
+export const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-    const [cookies, setCookie] = useCookies(['username', 'password', 'role']);
+    const {currentRole, setCurrentRole} = useContext(RoleContext);
+
 
     const handleLogin = () => {
         // Check if username and password match the value from App.tsx
@@ -41,11 +42,7 @@ const LoginPage: React.FC = () => {
             console.log('Login successful');
             setShowSuccessMessage(true);
             setLoginError(false);
-            // Perform additional actions or redirect to another page
-            // Set the session cookie with the "username" and "password" values
-            setCookie('username', username, { path: '/' });
-            setCookie('password', password, { path: '/' });
-            setCookie('role', 'student', { path: '/' });
+            setCurrentRole(Role.Student)
         } else {
             // Failed login
             console.log('Login failed');
@@ -54,9 +51,9 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="login-container"> {/* Apply the container class */}
             <h2>Login</h2>
-            <div>
+            <div className="input-group"> {/* Apply the input group class */}
                 <label htmlFor="username">Username:</label>
                 <input
                     type="text"
@@ -65,7 +62,7 @@ const LoginPage: React.FC = () => {
                     onChange={(e) => setUsername(e.target.value)}
                 />
             </div>
-            <div>
+            <div className="input-group"> {/* Apply the input group class */}
                 <label htmlFor="password">Password:</label>
                 <input
                     type="password"
@@ -74,16 +71,14 @@ const LoginPage: React.FC = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </div>
-            {loginError && <p style={{ color: 'red' }}>Invalid username or password</p>}
+            {loginError && <p className="error-message">Invalid username or password</p>}
             {showSuccessMessage && (
-                <div style={{ color: 'green' }}>
+                <div className="success-message">
                     <p>Correct Password</p>
-                    <p>Username: {cookies.username}</p>
-                    <p>Role: {cookies.password}</p>
-                    <p>Role: {cookies.role}</p>
+                    <p>Role: {currentRole}</p>
                 </div>
             )}
-            <button onClick={handleLogin}>Login</button>
+            <button className="login-button" onClick={handleLogin}>Login</button>
         </div>
     );
 };

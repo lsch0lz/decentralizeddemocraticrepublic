@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {CookiesProvider} from "react-cookie";
+import {RoleContextProvider} from "./components/RoleContext";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
-    <CookiesProvider>
-        <App />
-    </CookiesProvider>,
+    <RoleContextProvider>
+        <App/>
+    </RoleContextProvider>,
     rootElement
 );
 
