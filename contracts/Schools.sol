@@ -45,7 +45,8 @@ contract School {
         // Set the school's name
         schools[msg.sender].name = _name;  
         // Set the caller's address as the principal
-        schools[msg.sender].principal = msg.sender;  
+        schools[msg.sender].principal = msg.sender;
+    }
 
     function createClass(uint256 _classId, string memory _name) public {
         SchoolData storage school = schools[msg.sender];
