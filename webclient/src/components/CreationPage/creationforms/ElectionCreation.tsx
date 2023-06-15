@@ -6,7 +6,7 @@ import Web3 from "web3";
 
 
 const contractABI = schoolContract.abi;
-const contractAddress = '0x1935f22D4803f78A01A0B5E5aBf6BaC7719effD7'; // Replace with your contract address
+const contractAddress = '0x958e2120F66C70179dbDe3f1B8Fb60bCEa31AD1E'; // Replace with your contract address
 
 const ganacheUrl = 'HTTP://127.0.0.1:7545';
 const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
@@ -20,12 +20,11 @@ interface OptionsFormProps {
     onSubmit: (options: string[]) => void;
 }
 
-const createElection = async (electionName: string, options: string[]) => {
+const createElection = async (electionName: string) => {
     const accounts = await web3.eth.getAccounts();
     try {
         console.log('Creating election with name:', electionName)
-        console.log('Creating election with options:', options)
-        return await contractInstance.methods.createElection(electionName, options).send({from: accounts[0]});
+        return await contractInstance.methods.createElection(electionName).send({from: accounts[0]});
     } catch (error) {
         console.error('Failed to create election:', error);
     }
@@ -83,7 +82,7 @@ export function ElectionCreation() {
         console.log('Saving election to chain with name:', electionName)
         console.log('Saving election to chain with options:', optionsList)
 
-        await createElection(electionName, optionsList);
+        await createElection(electionName);
         console.log("Saved election to chain", electionName)
         console.log("Getting election from chain", electionName)
         await vote(1);

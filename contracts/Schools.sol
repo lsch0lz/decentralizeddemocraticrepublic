@@ -1,5 +1,5 @@
 pragma solidity ^0.5.16;
-pragma experimental ABIEncoderV2;
+// pragma experimental ABIEncoderV2;
 
 contract School {
 
@@ -28,12 +28,11 @@ contract School {
 
     struct Election {
         string name;
-        string[] options;
         uint voteCount;
     }
 
-    // Election[] public elections;
-    mapping(uint => Election) public elections;
+    Election[] public elections;
+    //mapping(uint => Election) public elections;
 
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
 
@@ -45,7 +44,8 @@ contract School {
         // Set the school's name
         schools[msg.sender].name = _name;  
         // Set the caller's address as the principal
-        schools[msg.sender].principal = msg.sender;  
+        schools[msg.sender].principal = msg.sender;
+    }
 
     function createClass(uint256 _classId, string memory _name) public {
         SchoolData storage school = schools[msg.sender];
@@ -90,44 +90,15 @@ contract School {
         return (class.name, class.teachers.length, class.students.length);
         // Get the class details (name, number of teachers, number of students)
     }
-//
-//    function getAllClassNames() public view returns (bytes32[] memory) {
-//        SchoolData storage school = schools[msg.sender];
-//        uint256 classCount = 0;
-//        for (uint256 i = 0; i < 1000000; i++) { // Assuming the maximum number of classes is 1,000,000
-//            if (school.classes[i].teachers.length > 0) {
-//                classCount++;
-//            } else {
-//                break;
-//            }
-//        }
-//
-//        bytes32[] memory classNames = new bytes32[](classCount);
-//        for (uint256 i = 0; i < classCount; i++) {
-//            classNames[i] = stringToBytes32(school.classes[i].name);
-//        }
-//
-//        return classNames;
-//    }
-//
-//    function stringToBytes32(string memory source) public pure returns (bytes32 result) {
-//        bytes memory tempEmptyStringTest = bytes(source);
-//        if (tempEmptyStringTest.length == 0) {
-//            return 0x0;
-//        }
-//
-//        assembly {
-//            result := mload(add(source, 32))
-//        }
-//    }
 
-
-    function createElection(string memory electionName, string[] memory electionOptions) public {
-        elections[1] = Election(electionName, electionOptions, 0);
+    function createElection(string calldata electionName) external {
+        Election memory election = Election(electionName, 0);
+        elections.push(election);
+        // elections[1] = Election(electionName, electionOptions, 0);
     }
 
     function vote(uint electionID) public {
-        Election storage election = elections[1];
+        Election storage election = elections[0];
         election.voteCount += 1;
     }
 
@@ -136,5 +107,4 @@ contract School {
         Election storage election = elections[1];
         return election.voteCount;
     }
-
 }
