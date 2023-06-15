@@ -7,8 +7,6 @@ import About from "./components/About";
 import Error from "./components/Error";
 import Navigation, {NavLinkItem} from "./components/Navigation";
 import CreationPage from "./components/CreationPage/CreationPage";
-import {Web3ServiceImpl} from "./Web3Service";
-import ServiceContext from './ServiceContext';
 
 
 function App() {
@@ -21,10 +19,8 @@ function App() {
         {text: 'Create', path: '/create'}
     ];
 
-    const web3Service = new Web3ServiceImpl();
 
     return (
-        <ServiceContext.Provider value={web3Service}>
             <Router>
                 <div>
                     <Navigation navLinks={navLinks}/>
@@ -37,7 +33,7 @@ function App() {
                     </Routes>
                 </div>
             </Router>
-        </ServiceContext.Provider>
+
     );
 }
 
