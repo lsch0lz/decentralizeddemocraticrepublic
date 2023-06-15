@@ -1,5 +1,5 @@
 pragma solidity ^0.5.16;
-pragma experimental ABIEncoderV2;
+// pragma experimental ABIEncoderV2;
 
 contract School {
 
@@ -28,22 +28,23 @@ contract School {
 
     struct Election {
         string name;
-        string[] options;
         uint voteCount;
     }
 
-    // Election[] public elections;
-    mapping(uint => Election) public elections;
+    Election[] public elections;
+    //mapping(uint => Election) public elections;
 
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
 
+
+    // CREATE
     function createSchool(string memory _name) public {
-        require(schools[msg.sender].principal == address(0), "School already exists");
-        // Check if school already exists
-        schools[msg.sender].name = _name;
+        // Check if school already exists ==> Nein, implizit nur eine Schule pro Adresse (Principal) erlaubt!
+        require(schools[msg.sender].principal == address(0), "This address already has a school assigned to it");
         // Set the school's name
-        schools[msg.sender].principal = msg.sender;
+        schools[msg.sender].name = _name;  
         // Set the caller's address as the principal
+        schools[msg.sender].principal = msg.sender;
     }
 
     function createClass(uint256 _classId, string memory _name) public {
@@ -76,6 +77,8 @@ contract School {
         // Add student to the class
     }
 
+
+    // READ
     function getSchoolName() public view returns (string memory) {
         return schools[msg.sender].name;
         // Get the name of the school
@@ -88,12 +91,14 @@ contract School {
         // Get the class details (name, number of teachers, number of students)
     }
 
-    function createElection(string memory electionName, string[] memory electionOptions) public {
-        elections[1] = Election(electionName, electionOptions, 0);
+    function createElection(string calldata electionName) external {
+        Election memory election = Election(electionName, 0);
+        elections.push(election);
+        // elections[1] = Election(electionName, electionOptions, 0);
     }
 
     function vote(uint electionID) public {
-        Election storage election = elections[1];
+        Election storage election = elections[0];
         election.voteCount += 1;
     }
 
@@ -102,5 +107,4 @@ contract School {
         Election storage election = elections[1];
         return election.voteCount;
     }
-
 }
