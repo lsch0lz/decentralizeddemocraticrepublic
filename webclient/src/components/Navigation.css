@@ -1,0 +1,17 @@
+/* Navigation.css */
+.nav-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.nav-link {
+    margin: 0 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: #000;
+}
