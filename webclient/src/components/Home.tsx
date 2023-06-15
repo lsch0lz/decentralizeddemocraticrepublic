@@ -5,7 +5,9 @@ function Home() {
     let [value, setValue] = useState<String>()
 
     const web3Service = useContext(ServiceContext);
-    const [, contract] = web3Service.getHelloWorldContract();
+    const [web3, contract] = web3Service.getHelloWorldContract();
+
+    console.log('contract', contract)
 
     contract.methods.getString().call()
         .then((result: any) => {
