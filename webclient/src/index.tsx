@@ -8,10 +8,8 @@ import {Web3ServiceImpl} from "./Web3Service";
 import ServiceContext from './ServiceContext';
 
 const rootElement = document.getElementById("root");
-const web3Service = new Web3ServiceImpl();
-
 ReactDOM.render(
-    <ServiceContext.Provider value={web3Service}>
+    <ServiceContext.Provider value={new Web3ServiceImpl()}>
         <RoleContextProvider>
             <App/>
         </RoleContextProvider>
