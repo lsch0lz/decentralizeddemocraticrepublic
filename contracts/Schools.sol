@@ -37,14 +37,15 @@ contract School {
 
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
 
+
+    // CREATE
     function createSchool(string memory _name) public {
-        require(schools[msg.sender].principal == address(0), "School already exists");
-        // Check if school already exists
-        schools[msg.sender].name = _name;
+        // Check if school already exists ==> Nein, implizit nur eine Schule pro Adresse (Principal) erlaubt!
+        require(schools[msg.sender].principal == address(0), "This address already has a school assigned to it");
         // Set the school's name
-        schools[msg.sender].principal = msg.sender;
+        schools[msg.sender].name = _name;  
         // Set the caller's address as the principal
-    }
+        schools[msg.sender].principal = msg.sender;  
 
     function createClass(uint256 _classId, string memory _name) public {
         SchoolData storage school = schools[msg.sender];
@@ -76,6 +77,8 @@ contract School {
         // Add student to the class
     }
 
+
+    // READ
     function getSchoolName() public view returns (string memory) {
         return schools[msg.sender].name;
         // Get the name of the school
@@ -87,6 +90,37 @@ contract School {
         return (class.name, class.teachers.length, class.students.length);
         // Get the class details (name, number of teachers, number of students)
     }
+//
+//    function getAllClassNames() public view returns (bytes32[] memory) {
+//        SchoolData storage school = schools[msg.sender];
+//        uint256 classCount = 0;
+//        for (uint256 i = 0; i < 1000000; i++) { // Assuming the maximum number of classes is 1,000,000
+//            if (school.classes[i].teachers.length > 0) {
+//                classCount++;
+//            } else {
+//                break;
+//            }
+//        }
+//
+//        bytes32[] memory classNames = new bytes32[](classCount);
+//        for (uint256 i = 0; i < classCount; i++) {
+//            classNames[i] = stringToBytes32(school.classes[i].name);
+//        }
+//
+//        return classNames;
+//    }
+//
+//    function stringToBytes32(string memory source) public pure returns (bytes32 result) {
+//        bytes memory tempEmptyStringTest = bytes(source);
+//        if (tempEmptyStringTest.length == 0) {
+//            return 0x0;
+//        }
+//
+//        assembly {
+//            result := mload(add(source, 32))
+//        }
+//    }
+
 
     function createElection(string memory electionName, string[] memory electionOptions) public {
         elections[1] = Election(electionName, electionOptions, 0);
