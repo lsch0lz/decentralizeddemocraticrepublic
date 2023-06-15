@@ -4,7 +4,7 @@ import Web3 from "web3";
 
 
 const contractABI = lorenIpsumContract.abi;
-const contractAddress = '0xd1AC383418Dd8c17577b647dBDbEd4E473E7bf49'; // Replace with your contract address
+const contractAddress = '0x1935f22D4803f78A01A0B5E5aBf6BaC7719effD7'; // Replace with your contract address
 
 const web3 = new Web3(Web3.givenProvider);
 // @ts-ignore

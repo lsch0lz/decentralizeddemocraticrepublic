@@ -5,7 +5,7 @@ import RoleContext, {Role} from "./RoleContext";
 import './LoginPage.css';
 
 const contractABI = schoolContract.abi;
-const contractAddress = '0x0dde0876D952Ac08c019D5529C8616c800537Aa8'; // Replace with your contract address
+const contractAddress = '0x1935f22D4803f78A01A0B5E5aBf6BaC7719effD7'; // Replace with your contract address
 
 const ganacheUrl = 'HTTP://127.0.0.1:7545';
 const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
