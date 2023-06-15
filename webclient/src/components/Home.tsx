@@ -1,19 +1,13 @@
-import React, {useState} from 'react';
-import lorenIpsumContract from "../contracts/StringContract.json";
-import Web3 from "web3";
-
-
-const contractABI = lorenIpsumContract.abi;
-const contractAddress = '0xd1AC383418Dd8c17577b647dBDbEd4E473E7bf49'; // Replace with your contract address
-
-const web3 = new Web3(Web3.givenProvider);
-// @ts-ignore
-const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
+import React, {useContext, useState} from 'react';
+import ServiceContext from "../ServiceContext";
 
 function Home() {
     let [value, setValue] = useState<String>()
 
-    contractInstance.methods.getString().call()
+    const web3Service = useContext(ServiceContext);
+    const [, contract] = web3Service.getHelloWorldContract();
+
+    contract.methods.getString().call()
         .then((result: any) => {
             setValue(result)
         })
