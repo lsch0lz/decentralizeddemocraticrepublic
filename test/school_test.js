@@ -14,44 +14,40 @@ const SchoolsContract = contract(schoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // Your Account
-const account = "0x4c59c3E36C086c4134F0315cCDBb97Af4b98fAE6";
+const account = "0x49D89eEAcB3951288937C862982d0e67fF020847";
 
-describe('Tests for School Contract', () => {
+describe('Tests for School Contract\n'
+    + '(Creation is only possible the first time)', () => {
   const schoolName = "Hauptschulä";
+  const password = "top_secret"
 
   context('[Test] School', () => {
-    it('Create School (Is only possible the first time)', async () => {
+    it('Create School', async () => {
       const instance = await SchoolsContract.deployed();
-      const result = await instance.createSchool(schoolName, { from: account });
+      await instance.createSchool(schoolName, { from: account });
     });
-
-    // it('Read School from Blockchain', async () => {
-    //   const instance = await SchoolsContract.deployed();
-    //   const res = await instance.getSchoolName({from: fromAccount });
-    //   expect(res).to.equal(schoolName)
-    // });
   });
-
 
   context('[Test] Class', () =>{
     const class_name = '8a';
     it('Create Class', async () => {
       const instance = await SchoolsContract.deployed();
       await instance.createClass(class_name, schoolName, {from: account });
+      await instance.createClass("Q12", schoolName, {from: account });
     });
 
-    it('Read Class from Blockchain', async () => {
+    it('Read Class', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getClassDetails(class_name, schoolName, {from: account });
-      // expect(res[0]).to.equal(class_name);
+      await instance.getClassDetails(class_name, schoolName, {from: account });
     });
 
-    // it('Read List of all classes', async () => {
-    //   const instance = await SchoolsContract.deployed();
-    //   const res = await instance.getAllClassNames({from: account });
-    //   expect(res[0]).to.be.an('array');
-    //   expect(res[0]).to.include(class_name)
-    // });
+    it('Read Class List', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.getAllClasses(schoolName, {from: account });
+      expect(res).to.be.an('array');
+      expect(res).to.contain("Q12");
+      expect(res).to.contain(class_name)
+    });
   });
 
   context('[Test] Election', () => {
@@ -89,12 +85,59 @@ describe('Tests for School Contract', () => {
     });
   });
 
-  // context('[Test] Teacher', () => {
-  //   it('Create Teacher', async () => {
-  //     const instance = await SchoolsContract.deployed();
-  //     await instance.addTeacherToClass(class_id, teacher_name,{from: account })
-  //   });
-  // });
+  context('[Test] Members', () => {
+    const member_class = "43c";
+
+    it('Create Class, Students, and Teacher', async () => {
+      const instance = await SchoolsContract.deployed();
+
+      await instance.createClass(member_class, schoolName, {from: account});
+
+      await instance.addTeacherToClass("Heinrich Faustus", password, member_class,
+          schoolName, {from: account});
+      await instance.addTeacherToClass("Henry Baiker", password, member_class,
+          schoolName, {from: account});
+
+      await instance.addStudentToClass("Ferdinand Koenig", password, member_class,
+          schoolName, {from: account});
+      await instance.addStudentToClass("Moritz Lindner", password, member_class,
+          schoolName, {from: account});
+      await instance.addStudentToClass("Lukas Scholz", password, member_class,
+          schoolName, {from: account});
+
+    });
+
+    it('Read Class and check number of assigned members', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.getClassDetails(member_class, schoolName, {from: account });
+
+      expect(res[0]['words'][0]).to.equal(2); // Are there 2 teachers?
+      expect(res[1]['words'][0]).to.equal(3); // Are there 3 students?
+    });
+  });
+
+  context('[Test] Login\n'
+      + '(execute Members test before)', async () => {
+    it('Login success student', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res= await instance.logIn("Ferdinand Koenig", password,  schoolName, {from: account});
+      expect(res[0]).to.be.true;
+      expect(res[1]).to.equal("student");
+    });
+
+    it('Login success teacher', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res= await instance.logIn("Heinrich Faustus", password,  schoolName, {from: account});
+      expect(res[0]).to.be.true;
+      expect(res[1]).to.equal("teacher");
+    });
+
+    it('Login fail', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.logIn("Ferdinand Koenig", "123",  schoolName, {from: account});
+      expect(res[0]).to.be.false;
+    });
+  });
 });
 
 

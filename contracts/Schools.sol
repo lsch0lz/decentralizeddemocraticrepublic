@@ -5,13 +5,12 @@ contract School {
 
     struct Teacher {
         string name;
-        uint256 id;
+        string password;
     }
 
     struct Student {
         string name;
         string password;
-        uint256 id;
     }
 
     struct Class {
@@ -23,7 +22,6 @@ contract School {
         address principal;
         string[] class_names; // keys for classes
         mapping(string => Class) classes;
-        mapping(string => Member) members;
         mapping(uint256 => Election) elections;
     }
 
@@ -33,18 +31,10 @@ contract School {
         mapping(string => uint256) electionResults;
     }
 
-    struct Member {
-        string username;
-        string role; // Student, Teacher
-        string password;
-    }
+    mapping(string => SchoolData) private schools;  // Mapping to store school data (Principal is owner)
 
 
-
-    mapping(string => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
-
-
-    function isElementInArray(string memory target, string[] memory array) public view returns (bool) {
+    function isElementInArray(string memory target, string[] memory array) private pure returns (bool) {
         for (uint256 i = 0; i < array.length; i++) {
             if (keccak256(abi.encodePacked(array[i])) == keccak256(abi.encodePacked(target))) {
                 return true;
@@ -62,10 +52,24 @@ contract School {
         schools[_name].principal = msg.sender;
     }
 
-//    function logIn(string memory username, string memory password, string memory school) public view returns (bool, string memory){
-//
-//        return (true, "HallO");
-//    }
+    function logIn(string memory username, string memory password, string memory _school_name) public view returns (bool, string memory){
+        SchoolData storage school = schools[_school_name];
+        require(school.principal != address(0), "School does not exist");
+        for(uint i = 0; i < school.class_names.length; i++){
+            Class storage class = school.classes[school.class_names[i]];
+            for (uint j = 0; j < class.students.length; j++){
+                if (keccak256(bytes(class.students[j].name)) == keccak256(bytes(username))) {
+                    if (keccak256(bytes(class.students[j].password)) == keccak256(bytes(password))) return (true, "student");
+                }
+            }
+            for (uint j = 0; j < class.teachers.length; j++){
+                if (keccak256(bytes(class.teachers[j].name)) == keccak256(bytes(username))) {
+                    if (keccak256(bytes(class.teachers[j].password)) == keccak256(bytes(password))) return (true, "teacher");
+                }
+            }
+        }
+        return (false, "");
+    }
 
 
     // CLASS
@@ -80,7 +84,7 @@ contract School {
         // Set the class name
     }
 
-    function addTeacherToClass(string memory class_name, string memory _teacherName, uint256 _teacherId, string memory _school_name) public {
+    function addTeacherToClass(string memory _teacherName, string memory _password, string memory class_name, string memory _school_name) public {
         SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         require(school.principal == msg.sender); // Principal function
@@ -88,17 +92,18 @@ contract School {
 
         require(isElementInArray(class_name, school.class_names), "Class does not exist");
         // Check if class exists
-        school.classes[class_name].teachers.push(Teacher(_teacherName, _teacherId));
+        Class storage class = school.classes[class_name];
+        class.teachers.push(Teacher(_teacherName, _password));
         // Add teacher to the class
     }
 
-    function addStudentToClass(string memory class_name, string memory _studentName, uint256 _studentId, string memory _password, string memory _school_name) public {
+    function addStudentToClass(string memory _studentName, string memory _password, string memory class_name, string memory _school_name) public {
         SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         // Check if the school exists
         require(isElementInArray(class_name, school.class_names), "Class does not exist");
         // Check if class exists
-        school.classes[class_name].students.push(Student(_studentName, _password, _studentId));
+        school.classes[class_name].students.push(Student(_studentName, _password));
         // Add student to the class
     }
 
@@ -111,6 +116,12 @@ contract School {
         // Check if class exists
         return (class.teachers.length, class.students.length);
         // Get the class details (name, number of teachers, number of students)
+    }
+
+    function getAllClasses(string memory _school_name) public view returns (string[] memory){
+        SchoolData storage school = schools[_school_name];
+        require(school.principal != address(0), "School does not exist");
+        return school.class_names;
     }
 
 
