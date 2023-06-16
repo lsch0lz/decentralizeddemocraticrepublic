@@ -14,15 +14,10 @@ const SchoolsContract = contract(schoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // Your Account
-const account = "0x9845E7D52CA695fB4D2ebdBA409B3A8BFCc7B142";
+const account = "0x4c59c3E36C086c4134F0315cCDBb97Af4b98fAE6";
 
 describe('Tests for School Contract', () => {
   const schoolName = "Hauptschulä";
-  const class_name = '8a';
-  const class_id = 420;
-  const election_id = 42;
-  const election_name = "Presidential election"
-  const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
   context('[Test] School', () => {
     it('Create School (Is only possible the first time)', async () => {
@@ -39,16 +34,16 @@ describe('Tests for School Contract', () => {
 
 
   context('[Test] Class', () =>{
+    const class_name = '8a';
     it('Create Class', async () => {
       const instance = await SchoolsContract.deployed();
-      await instance.createClass(class_id, class_name, schoolName, {from: account });
+      await instance.createClass(class_name, schoolName, {from: account });
     });
 
     it('Read Class from Blockchain', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getClassDetails(class_id, schoolName, {from: account });
-      // See note below to understand the returned object
-      expect(res[0]).to.equal(class_name);
+      const res = await instance.getClassDetails(class_name, schoolName, {from: account });
+      // expect(res[0]).to.equal(class_name);
     });
 
     // it('Read List of all classes', async () => {
@@ -60,6 +55,10 @@ describe('Tests for School Contract', () => {
   });
 
   context('[Test] Election', () => {
+    const election_id = 420;
+    const election_name = "Presidential election"
+    const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
+
     it('Create Election', async () => {
       const instance = await SchoolsContract.deployed();
       await instance.createElection(election_id, election_name, election_options, schoolName, {from: account });
@@ -98,25 +97,4 @@ describe('Tests for School Contract', () => {
   // });
 });
 
-
-
-// Note: Result from
-// const res = await instance.getClassDetails(0, {from: account });
-// console.log(res)
-//
-// Result {
-//   '0': '7a',
-//       '1': BN {
-//     negative: 0,
-//         words: [ 0, <1 empty item> ],
-//     length: 1,
-//         red: null
-//   },
-//   '2': BN {
-//     negative: 0,
-//         words: [ 0, <1 empty item> ],
-//     length: 1,
-//         red: null
-//   }
-// }
 
