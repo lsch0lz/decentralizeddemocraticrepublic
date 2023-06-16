@@ -15,17 +15,16 @@ contract School {
     }
 
     struct Class {
-        string name;
         Teacher[] teachers;
         Student[] students;
     }
 
     struct SchoolData {
-        string name;
         address principal;
-        mapping(uint256 => Class) classes;
-        // Election[] public elections;
-        mapping(uint256 => Election) elections; //TODO evaluate if this is indeed the right data structure
+        string[] class_names; // keys for classes
+        mapping(string => Class) classes;
+        mapping(string => Member) members;
+        mapping(uint256 => Election) elections;
     }
 
     struct Election {
@@ -34,71 +33,90 @@ contract School {
         mapping(string => uint256) electionResults;
     }
 
+    struct Member {
+        string username;
+        string role; // Student, Teacher
+        string password;
+    }
 
 
-    mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
+
+    mapping(string => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
+
+
+    function isElementInArray(string memory target, string[] memory array) public view returns (bool) {
+        for (uint256 i = 0; i < array.length; i++) {
+            if (keccak256(abi.encodePacked(array[i])) == keccak256(abi.encodePacked(target))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     // SCHOOL
     function createSchool(string memory _name) public {
         // Check if school already exists ==> Nein, implizit nur eine Schule pro Adresse (Principal) erlaubt!
-        require(schools[msg.sender].principal == address(0), "This address already has a school assigned to it");
-        // Set the school's name
-        schools[msg.sender].name = _name;  
+        require(schools[_name].principal == address(0), "This address already has a school assigned to it");
         // Set the caller's address as the principal
-        schools[msg.sender].principal = msg.sender;
+        schools[_name].principal = msg.sender;
     }
 
-    function getSchoolName() public view returns (string memory) {
-        return schools[msg.sender].name;
-        // Get the name of the school
-    }
-
-
+//    function logIn(string memory username, string memory password, string memory school) public view returns (bool, string memory){
+//
+//        return (true, "HallO");
+//    }
 
 
     // CLASS
-    function createClass(uint256 _classId, string memory _name) public {
-        SchoolData storage school = schools[msg.sender];
+    function createClass(string memory _name, string memory _school_name) public {
+        SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
-        // Check if the school exists
-        require(school.classes[_classId].teachers.length == 0, "Class already exists");
-        // Check if class already exists
-        school.classes[_classId].name = _name;
+        require(school.principal == msg.sender); // Principal function
+
+        require(!isElementInArray(_name, school.class_names), "Class already exists");
+
+        school.class_names.push(_name);
         // Set the class name
     }
 
-    function addTeacherToClass(uint256 _classId, string memory _teacherName, uint256 _teacherId) public {
-        SchoolData storage school = schools[msg.sender];
+    function addTeacherToClass(string memory class_name, string memory _teacherName, uint256 _teacherId, string memory _school_name) public {
+        SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
+        require(school.principal == msg.sender); // Principal function
         // Check if the school exists
-        require(school.classes[_classId].teachers.length > 0, "Class does not exist");
+
+        require(isElementInArray(class_name, school.class_names), "Class does not exist");
         // Check if class exists
-        school.classes[_classId].teachers.push(Teacher(_teacherName, _teacherId));
+        school.classes[class_name].teachers.push(Teacher(_teacherName, _teacherId));
         // Add teacher to the class
     }
 
-    function addStudentToClass(uint256 _classId, string memory _studentName, uint256 _studentId, string memory _password) public {
-        SchoolData storage school = schools[msg.sender];
+    function addStudentToClass(string memory class_name, string memory _studentName, uint256 _studentId, string memory _password, string memory _school_name) public {
+        SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         // Check if the school exists
-        require(school.classes[_classId].teachers.length > 0, "Class does not exist");
+        require(isElementInArray(class_name, school.class_names), "Class does not exist");
         // Check if class exists
-        school.classes[_classId].students.push(Student(_studentName, _password, _studentId));
+        school.classes[class_name].students.push(Student(_studentName, _password, _studentId));
         // Add student to the class
     }
 
-    function getClassDetails(uint256 _classId) public view returns (string memory, uint256, uint256) {
-        SchoolData storage school = schools[msg.sender];
-        Class storage class = school.classes[_classId];
-        return (class.name, class.teachers.length, class.students.length);
+    function getClassDetails(string memory class_name, string memory _school_name) public view returns (uint256, uint256) {
+        SchoolData storage school = schools[_school_name];
+        Class storage class = school.classes[class_name];
+        require(school.principal != address(0), "School does not exist");
+        // Check if the school exists
+        require(isElementInArray(class_name, school.class_names), "Class does not exist");
+        // Check if class exists
+        return (class.teachers.length, class.students.length);
         // Get the class details (name, number of teachers, number of students)
     }
 
 
     // ELECTION
-    function createElection(uint256 _electionId, string memory _name, string[] memory _options) public {
-        SchoolData storage school = schools[msg.sender];
+    function createElection(uint256 _electionId, string memory _name, string[] memory _options, string memory _school_name) public {
+        SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         // Check if the school exists
         Election storage election = school.elections[_electionId];
@@ -111,15 +129,15 @@ contract School {
         }
     }
 
-    function getElectionName(uint256 electionID) public view returns (string memory){
-        SchoolData storage school = schools[msg.sender];
+    function getElectionName(uint256 electionID, string memory _school_name) public view returns (string memory){
+        SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         Election storage election = school.elections[electionID];
         return election.name;
     }
 
-    function vote(uint256 electionID, string memory option) public {
-        SchoolData storage school = schools[msg.sender];
+    function vote(uint256 electionID, string memory option, string memory _school_name) public {
+        SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         Election storage election = school.elections[electionID];
         // TODO check if election exists
@@ -127,8 +145,8 @@ contract School {
         election.electionResults[option] += 1;
     }
 
-    function getWinner(uint256 electionID) public view returns (string memory, uint256) {
-        SchoolData storage school = schools[msg.sender];
+    function getWinner(uint256 electionID, string memory _school_name) public view returns (string memory, uint256) {
+        SchoolData storage school = schools[_school_name];
         Election storage election = school.elections[electionID];
         uint256 maxResult = 0;
         string memory maxKey;

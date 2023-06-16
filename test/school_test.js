@@ -13,64 +13,37 @@ const web3 = new Web3(provider);
 const SchoolsContract = contract(schoolsContractJson);
 SchoolsContract.setProvider(provider);
 
-async function createSchoolTest(name, fromAccount) {
-  const instance = await SchoolsContract.deployed();
-  const result = await instance.createSchool(name, { from: fromAccount });
-  // Code would break here
-
-  // console.log('School created successfully!');
-  // console.log('Transaction hash:', result.tx);
-  //
-  // // Check if logs were emitted during the transaction
-  // if (result.logs && result.logs.length > 0) {
-  //   console.log('School address:', result.logs[0].args.principal);
-  // } else {
-  //   console.log('No logs found.');
-  // }
-}
-
-async function getSchoolTest(fromAccount){
-  const instance = await SchoolsContract.deployed();
-  const result = await instance.getSchoolName({from: fromAccount });
-
-  return result;
-}
-  
-
 // Your Account
-const account = "0x90795AC9D90F51D23825652ff67E8395450Db796";
+const account = "0x4c59c3E36C086c4134F0315cCDBb97Af4b98fAE6";
 
 describe('Tests for School Contract', () => {
   const schoolName = "Hauptschulä";
-  const class_name = '8a';
-  const class_id = 420;
-  const election_id = 42;
-  const election_name = "Presidential election"
-  const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
   context('[Test] School', () => {
     it('Create School (Is only possible the first time)', async () => {
-      await createSchoolTest(schoolName, account)
+      const instance = await SchoolsContract.deployed();
+      const result = await instance.createSchool(schoolName, { from: account });
     });
 
-    it('Read School from Blockchain', async () => {
-      const res = await getSchoolTest(account);
-      expect(res).to.equal(schoolName)
-    });
+    // it('Read School from Blockchain', async () => {
+    //   const instance = await SchoolsContract.deployed();
+    //   const res = await instance.getSchoolName({from: fromAccount });
+    //   expect(res).to.equal(schoolName)
+    // });
   });
 
 
   context('[Test] Class', () =>{
+    const class_name = '8a';
     it('Create Class', async () => {
       const instance = await SchoolsContract.deployed();
-      await instance.createClass(class_id, class_name, {from: account });
+      await instance.createClass(class_name, schoolName, {from: account });
     });
 
     it('Read Class from Blockchain', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getClassDetails(class_id, {from: account });
-      // See note below to understand the returned object
-      expect(res[0]).to.equal(class_name);
+      const res = await instance.getClassDetails(class_name, schoolName, {from: account });
+      // expect(res[0]).to.equal(class_name);
     });
 
     // it('Read List of all classes', async () => {
@@ -82,23 +55,27 @@ describe('Tests for School Contract', () => {
   });
 
   context('[Test] Election', () => {
+    const election_id = 420;
+    const election_name = "Presidential election"
+    const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
+
     it('Create Election', async () => {
       const instance = await SchoolsContract.deployed();
-      await instance.createElection(election_id, election_name, election_options, {from: account });
+      await instance.createElection(election_id, election_name, election_options, schoolName, {from: account });
     });
 
     it('Vote (Create)', async () => {
       const instance = await SchoolsContract.deployed();
-      await instance.vote(election_id, election_options[0], {from: account});
-      await instance.vote(election_id, election_options[1], {from: account});
-      await instance.vote(election_id, election_options[0], {from: account});
-      await instance.vote(election_id, election_options[2], {from: account});
-      await instance.vote(election_id, election_options[3], {from: account});
+      await instance.vote(election_id, election_options[0], schoolName, {from: account});
+      await instance.vote(election_id, election_options[1], schoolName, {from: account});
+      await instance.vote(election_id, election_options[0], schoolName, {from: account});
+      await instance.vote(election_id, election_options[2], schoolName, {from: account});
+      await instance.vote(election_id, election_options[3], schoolName, {from: account});
     });
 
     it('get election result', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getWinner(election_id, {from: account});
+      const res = await instance.getWinner(election_id, schoolName, {from: account});
 
       expect(res[0]).to.equal(election_options[0]); // res[0] is the winner (string)
       expect(res[1]['words'][0]).to.equal(2); // res[1]['words'][0] (int) is number of votes (Here two, originated from test above)
@@ -106,7 +83,7 @@ describe('Tests for School Contract', () => {
 
     it('get election name', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getElectionName(election_id, {from: account});
+      const res = await instance.getElectionName(election_id, schoolName, {from: account});
 
       expect(res).to.equal(election_name);
     });
@@ -120,25 +97,4 @@ describe('Tests for School Contract', () => {
   // });
 });
 
-
-
-// Note: Result from
-// const res = await instance.getClassDetails(0, {from: account });
-// console.log(res)
-//
-// Result {
-//   '0': '7a',
-//       '1': BN {
-//     negative: 0,
-//         words: [ 0, <1 empty item> ],
-//     length: 1,
-//         red: null
-//   },
-//   '2': BN {
-//     negative: 0,
-//         words: [ 0, <1 empty item> ],
-//     length: 1,
-//         red: null
-//   }
-// }
 
