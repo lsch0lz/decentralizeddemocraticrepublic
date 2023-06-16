@@ -14,22 +14,17 @@ const SchoolsContract = contract(schoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // Your Account
-const account = "0x4c59c3E36C086c4134F0315cCDBb97Af4b98fAE6";
+const account = "0x34e5BEF5788F6e109FA8990792769e1F5A9FE456";
 
-describe('Tests for School Contract', () => {
+describe('Tests for School Contract\n'
+    + '(Creation is only possible the first time)', () => {
   const schoolName = "Hauptschulä";
 
   context('[Test] School', () => {
-    it('Create School (Is only possible the first time)', async () => {
+    it('Create School', async () => {
       const instance = await SchoolsContract.deployed();
       const result = await instance.createSchool(schoolName, { from: account });
     });
-
-    // it('Read School from Blockchain', async () => {
-    //   const instance = await SchoolsContract.deployed();
-    //   const res = await instance.getSchoolName({from: fromAccount });
-    //   expect(res).to.equal(schoolName)
-    // });
   });
 
 
@@ -38,12 +33,20 @@ describe('Tests for School Contract', () => {
     it('Create Class', async () => {
       const instance = await SchoolsContract.deployed();
       await instance.createClass(class_name, schoolName, {from: account });
+      await instance.createClass("Q12", schoolName, {from: account });
     });
 
-    it('Read Class from Blockchain', async () => {
+    it('Read Class', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getClassDetails(class_name, schoolName, {from: account });
-      // expect(res[0]).to.equal(class_name);
+      await instance.getClassDetails(class_name, schoolName, {from: account });
+    });
+
+    it('Read Class List', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.getAllClasses(schoolName, {from: account });
+      expect(res).to.be.an('array');
+      expect(res).to.contain("Q12");
+      expect(res).to.contain(class_name)
     });
 
     // it('Read List of all classes', async () => {

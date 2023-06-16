@@ -41,10 +41,10 @@ contract School {
 
 
 
-    mapping(string => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
+    mapping(string => SchoolData) private schools;  // Mapping to store school data (Principal is owner)
 
 
-    function isElementInArray(string memory target, string[] memory array) public view returns (bool) {
+    function isElementInArray(string memory target, string[] memory array) private pure returns (bool) {
         for (uint256 i = 0; i < array.length; i++) {
             if (keccak256(abi.encodePacked(array[i])) == keccak256(abi.encodePacked(target))) {
                 return true;
@@ -111,6 +111,12 @@ contract School {
         // Check if class exists
         return (class.teachers.length, class.students.length);
         // Get the class details (name, number of teachers, number of students)
+    }
+
+    function getAllClasses(string memory _school_name) public view returns (string[] memory){
+        SchoolData storage school = schools[_school_name];
+        require(school.principal != address(0), "School does not exist");
+        return school.class_names;
     }
 
 
