@@ -38,13 +38,13 @@ async function getSchoolTest(fromAccount){
   
 
 // Your Account
-const account = "0x90795AC9D90F51D23825652ff67E8395450Db796";
+const account = "0x0a4C43990D300dBD1D15931bb62DD7BBB4C3D29B";
 
 describe('Tests for School Contract', () => {
   const schoolName = "Hauptschulä";
   const class_name = '8a';
   const class_id = 420;
-  const election_id = 42;
+  const election_id = 2;
   const election_name = "Presidential election"
   const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
