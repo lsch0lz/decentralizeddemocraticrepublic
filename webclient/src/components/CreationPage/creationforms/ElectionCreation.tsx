@@ -6,7 +6,7 @@ import Web3 from "web3";
 
 
 const contractABI = schoolContract.abi;
-const contractAddress = '0x1935f22D4803f78A01A0B5E5aBf6BaC7719effD7'; // Replace with your contract address
+const contractAddress = '0x7112c42D966F53cA0Ffe3e565AcD4361F83F1e38'; // Replace with your contract address
 
 const ganacheUrl = 'HTTP://127.0.0.1:7545';
 const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
@@ -15,39 +15,17 @@ const web3 = new Web3(httpProvider);
 // @ts-ignore
 const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
 
-
 interface OptionsFormProps {
     onSubmit: (options: string[]) => void;
 }
 
-const createElection = async (electionName: string, options: string[]) => {
+
+const createElection = async (electionName: string, optionsList: string[]) => {
     const accounts = await web3.eth.getAccounts();
     try {
-        console.log('Creating election with name:', electionName)
-        console.log('Creating election with options:', options)
-        return await contractInstance.methods.createElection(electionName, options).send({from: accounts[0]});
+        return await contractInstance.methods.createElection(2, electionName, optionsList).send({from: "0x0a4C43990D300dBD1D15931bb62DD7BBB4C3D29B"});
     } catch (error) {
         console.error('Failed to create election:', error);
-    }
-}
-
-const getVotes = async (electionID: number) => {
-    try {
-        console.log('Getting votes for election with ID:', electionID)
-        const result = await contractInstance.methods.getVotes(electionID).call()
-        return result;
-    } catch (error) {
-        console.error('Failed to get votes:', error);
-    }
-}
-
-const vote = async (electionID: number) => {
-    try {
-        console.log('Voting for election with ID:', electionID)
-        const result = await contractInstance.methods.vote(electionID).call()
-        return result;
-    } catch (error) {
-        console.error('Failed to vote:', error);
     }
 }
 
@@ -79,16 +57,16 @@ export function ElectionCreation() {
 
     const saveToChain = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Save to chain
-        console.log('Saving election to chain with name:', electionName)
-        console.log('Saving election to chain with options:', optionsList)
 
-        await createElection(electionName, optionsList);
-        console.log("Saved election to chain", electionName)
-        console.log("Getting election from chain", electionName)
-        await vote(1);
-        const result = await getVotes(1);
-        console.log("Got election from chain", result)
+        // await createElection(electionName, optionsList);
+
+        const accounts = await web3.eth.getAccounts();
+        await contractInstance.methods.vote(2, optionsList[0]).send({from: "0x0a4C43990D300dBD1D15931bb62DD7BBB4C3D29B"});
+        await contractInstance.methods.vote(2, optionsList[0]).send({from: "0x0a4C43990D300dBD1D15931bb62DD7BBB4C3D29B"});
+        await contractInstance.methods.vote(2, optionsList[1]).send({from: "0x0a4C43990D300dBD1D15931bb62DD7BBB4C3D29B"});
+
+        const res = await contractInstance.methods.getWinner(2).call({from: "0x0a4C43990D300dBD1D15931bb62DD7BBB4C3D29B"});
+        console.log(res);
     };
 
         return (
