@@ -1,4 +1,5 @@
 pragma solidity ^0.5.16;
+pragma experimental ABIEncoderV2;
 
 contract School {
 
@@ -29,9 +30,8 @@ contract School {
 
     struct Election {
         string name;
-        Teacher[] teachers;
-        Student[] students;
-        uint256 voteCount;
+        string[] keys;
+        mapping(string => uint256) electionResults;
     }
 
 
@@ -124,44 +124,57 @@ contract School {
 //    }
 
 
-//    function createElection(string memory electionName, string memory electionOptions) public {
-//        SchoolData storage school = schools[msg.sender];
-//        // Check if the school exists
-//        require(school.principal != address(0), "School does not exist");
-//        // TODO check if election exists
-//        uint256 _electionId = 0; //TODO
-//
-//        // Initialize the Election struct before assigning values
-//        Election storage election = school.elections[_electionId];
-//        election.name = electionName;
-//        election.options = electionOptions;
-//        election.voteCount = 0; // Initialize vote count to 0 or any other initial value
-//    }
-
-    function createElection(uint256 _electionId, string memory _name) public {
+    function createElection(uint256 _electionId, string memory _name, string[] memory _options) public {
         SchoolData storage school = schools[msg.sender];
         require(school.principal != address(0), "School does not exist");
         // Check if the school exists
-        require(school.elections[_electionId].teachers.length == 0, "Election already exists");
-        // Check if class already exists
-        school.elections[_electionId].name = _name;
-        // Set the class name
+        Election storage election = school.elections[_electionId];
+        // TODO check if election exists
+        election.name = _name;
+        election.keys = _options;
+        // add options to election
+        for (uint i=0; i< _options.length; i++){
+            election.electionResults[_options[i]] = 0;
+        }
     }
 
-    function vote(uint electionID) public {
-//        electionID = 0; // TODO
+    function getElectionName(uint256 electionID) public view returns (string memory){
         SchoolData storage school = schools[msg.sender];
         require(school.principal != address(0), "School does not exist");
-        // TODO check if election exist
-        school.elections[electionID].voteCount += 1;
+        Election storage election = school.elections[electionID];
+        return election.name;
+    }
+
+    function vote(uint256 electionID, string memory option) public {
+        SchoolData storage school = schools[msg.sender];
+        require(school.principal != address(0), "School does not exist");
+        Election storage election = school.elections[electionID];
+        // TODO check if election exists
+        // TODO check if option exists
+        election.electionResults[option] += 1;
     }
 
 
-    function getVotes(uint256 electionID) public view returns (uint256) {
-//        electionID = 0; // TODO
+    function getWinner(uint256 electionID) public view returns (string memory, uint256) {
         SchoolData storage school = schools[msg.sender];
         Election storage election = school.elections[electionID];
-        return election.voteCount;
+        uint256 maxResult = 0;
+        string memory maxKey;
+
+        // Iterate over the mapping
+        for (uint256 i_key = 0; i_key < election.keys.length; i_key++) {
+            string memory key = election.keys[i_key];
+            uint256 value = election.electionResults[key];
+
+            if (value > maxResult) {
+                maxResult = value;
+                maxKey = key;
+            }
+        }
+
+        require(maxResult > 0, "All values are zero");
+
+        return (maxKey, maxResult);
     }
 
 }

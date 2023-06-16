@@ -3,12 +3,7 @@ const contract = require('truffle-contract');
 // const {context} = require("@truffle/contract/webpack.config");
 const expect = require('chai').expect
 
-let schoolsContractJson;
-try{
-  schoolsContractJson = require('../build/contracts/Schools.json');
-}catch (e) {
-  schoolsContractJson = require('C:\\Users\\koenigf\\IdeaProjects\\decentralizeddemocraticrepublic\\build\\contracts\\School.json');
-}
+schoolsContractJson = require('./../build/contracts/School.json');
 
 // Set up a connection to your Ganache network
 const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
@@ -23,15 +18,15 @@ async function createSchoolTest(name, fromAccount) {
   const result = await instance.createSchool(name, { from: fromAccount });
   // Code would break here
 
-  console.log('School created successfully!');
-  console.log('Transaction hash:', result.tx);
-
-  // Check if logs were emitted during the transaction
-  if (result.logs && result.logs.length > 0) {
-    console.log('School address:', result.logs[0].args.principal);
-  } else {
-    console.log('No logs found.');
-  }
+  // console.log('School created successfully!');
+  // console.log('Transaction hash:', result.tx);
+  //
+  // // Check if logs were emitted during the transaction
+  // if (result.logs && result.logs.length > 0) {
+  //   console.log('School address:', result.logs[0].args.principal);
+  // } else {
+  //   console.log('No logs found.');
+  // }
 }
 
 async function getSchoolTest(fromAccount){
@@ -43,13 +38,13 @@ async function getSchoolTest(fromAccount){
   
 
 // Your Account
-const account = "0x2a17DDa86a414eeC603309216A04E67B24bf6B3D";
+const account = "0x90795AC9D90F51D23825652ff67E8395450Db796";
 
 describe('Tests for School Contract', () => {
   const schoolName = "Hauptschulä";
   const class_name = '8a';
   const class_id = 420;
-  const election_id = 44;
+  const election_id = 42;
   const election_name = "Presidential election"
   const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
@@ -89,21 +84,31 @@ describe('Tests for School Contract', () => {
   context('[Test] Election', () => {
     it('Create Election', async () => {
       const instance = await SchoolsContract.deployed();
-      await instance.createElection(election_id, class_name, {from: account });
+      await instance.createElection(election_id, election_name, election_options, {from: account });
     });
 
     it('Vote (Create)', async () => {
       const instance = await SchoolsContract.deployed();
-      await instance.vote(election_id, {from: account}); //TODO für wen vote ich
-      await instance.vote(election_id, {from: account});
+      await instance.vote(election_id, election_options[0], {from: account});
+      await instance.vote(election_id, election_options[1], {from: account});
+      await instance.vote(election_id, election_options[0], {from: account});
+      await instance.vote(election_id, election_options[2], {from: account});
+      await instance.vote(election_id, election_options[3], {from: account});
     });
 
     it('get election result', async () => {
       const instance = await SchoolsContract.deployed();
-      const res = await instance.getVotes(election_id, {from: account});
-      console.log(res)
-      // See note below to understand the returned object
-      expect(res['words'][0]).to.equal(2);
+      const res = await instance.getWinner(election_id, {from: account});
+
+      expect(res[0]).to.equal(election_options[0]); // res[0] is the winner (string)
+      expect(res[1]['words'][0]).to.equal(2); // res[1]['words'][0] (int) is number of votes (Here two, originated from test above)
+    });
+
+    it('get election name', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.getElectionName(election_id, {from: account});
+
+      expect(res).to.equal(election_name);
     });
   });
 
