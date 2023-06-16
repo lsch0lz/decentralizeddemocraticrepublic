@@ -1,5 +1,4 @@
 pragma solidity ^0.5.16;
-pragma experimental ABIEncoderV2;
 
 contract School {
 
@@ -24,16 +23,18 @@ contract School {
         string name;
         address principal;
         mapping(uint256 => Class) classes;
+        // Election[] public elections;
+        mapping(uint256 => Election) elections; //TODO evaluate if this is indeed the right data structure
     }
 
     struct Election {
         string name;
-        string[] options;
-        uint voteCount;
+        Teacher[] teachers;
+        Student[] students;
+        uint256 voteCount;
     }
 
-    // Election[] public elections;
-    mapping(uint => Election) public elections;
+
 
     mapping(address => SchoolData) public schools;  // Mapping to store school data (Principal is owner)
 
@@ -123,18 +124,43 @@ contract School {
 //    }
 
 
-    function createElection(string memory electionName, string[] memory electionOptions) public {
-        elections[1] = Election(electionName, electionOptions, 0);
+//    function createElection(string memory electionName, string memory electionOptions) public {
+//        SchoolData storage school = schools[msg.sender];
+//        // Check if the school exists
+//        require(school.principal != address(0), "School does not exist");
+//        // TODO check if election exists
+//        uint256 _electionId = 0; //TODO
+//
+//        // Initialize the Election struct before assigning values
+//        Election storage election = school.elections[_electionId];
+//        election.name = electionName;
+//        election.options = electionOptions;
+//        election.voteCount = 0; // Initialize vote count to 0 or any other initial value
+//    }
+
+    function createElection(uint256 _electionId, string memory _name) public {
+        SchoolData storage school = schools[msg.sender];
+        require(school.principal != address(0), "School does not exist");
+        // Check if the school exists
+        require(school.elections[_electionId].teachers.length == 0, "Election already exists");
+        // Check if class already exists
+        school.elections[_electionId].name = _name;
+        // Set the class name
     }
 
     function vote(uint electionID) public {
-        Election storage election = elections[1];
-        election.voteCount += 1;
+//        electionID = 0; // TODO
+        SchoolData storage school = schools[msg.sender];
+        require(school.principal != address(0), "School does not exist");
+        // TODO check if election exist
+        school.elections[electionID].voteCount += 1;
     }
 
 
-    function getVotes(uint electionID) public view returns (uint) {
-        Election storage election = elections[1];
+    function getVotes(uint256 electionID) public view returns (uint256) {
+//        electionID = 0; // TODO
+        SchoolData storage school = schools[msg.sender];
+        Election storage election = school.elections[electionID];
         return election.voteCount;
     }
 

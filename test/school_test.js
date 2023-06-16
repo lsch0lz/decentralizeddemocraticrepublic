@@ -43,12 +43,15 @@ async function getSchoolTest(fromAccount){
   
 
 // Your Account
-const account = "0xB3e64C2a561cDBc146332991ccBAf92F5519fFa7";
+const account = "0x2a17DDa86a414eeC603309216A04E67B24bf6B3D";
 
 describe('Tests for School Contract', () => {
   const schoolName = "Hauptschulä";
   const class_name = '8a';
   const class_id = 420;
+  const election_id = 44;
+  const election_name = "Presidential election"
+  const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
   context('[Test] School', () => {
     it('Create School (Is only possible the first time)', async () => {
@@ -81,6 +84,27 @@ describe('Tests for School Contract', () => {
     //   expect(res[0]).to.be.an('array');
     //   expect(res[0]).to.include(class_name)
     // });
+  });
+
+  context('[Test] Election', () => {
+    it('Create Election', async () => {
+      const instance = await SchoolsContract.deployed();
+      await instance.createElection(election_id, class_name, {from: account });
+    });
+
+    it('Vote (Create)', async () => {
+      const instance = await SchoolsContract.deployed();
+      await instance.vote(election_id, {from: account}); //TODO für wen vote ich
+      await instance.vote(election_id, {from: account});
+    });
+
+    it('get election result', async () => {
+      const instance = await SchoolsContract.deployed();
+      const res = await instance.getVotes(election_id, {from: account});
+      console.log(res)
+      // See note below to understand the returned object
+      expect(res['words'][0]).to.equal(2);
+    });
   });
 
   // context('[Test] Teacher', () => {
