@@ -4,7 +4,7 @@ import './ElectionCreation.css';
 import schoolContract from "../../../contracts/School.json";
 import Web3 from "web3";
 
-
+const contract = require('truffle-contract'); // TODO: This creates an error!!
 const contractABI = schoolContract.abi;
 const contractAddress = '0x7112c42D966F53cA0Ffe3e565AcD4361F83F1e38'; // Replace with your contract address
 
