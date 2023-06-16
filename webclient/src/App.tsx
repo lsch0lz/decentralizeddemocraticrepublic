@@ -19,19 +19,21 @@ function App() {
         {text: 'Create', path: '/create'}
     ];
 
+
     return (
-        <Router>
-            <div>
-                <Navigation navLinks={navLinks}/>
-                <Routes>
-                    <Route path="/" Component={Home}/>
-                    <Route path="/create" Component={CreationPage}/>
-                    <Route path="/about" Component={About}/>
-                    <Route path="/login" Component={Login}/>
-                    <Route path="*" Component={Error}/>
-                </Routes>
-            </div>
-        </Router>
+            <Router>
+                <div>
+                    <Navigation navLinks={navLinks}/>
+                    <Routes>
+                        <Route path="/" Component={Home}/>
+                        <Route path="/create" Component={CreationPage}/>
+                        <Route path="/about" Component={About}/>
+                        <Route path="/login" Component={Login}/>
+                        <Route path="*" Component={Error}/>
+                    </Routes>
+                </div>
+            </Router>
+
     );
 }
 
