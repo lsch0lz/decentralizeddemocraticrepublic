@@ -4,7 +4,6 @@ import Web3 from "web3";
 import ServiceContext from "../../../ServiceContext";
 import {Contract} from "web3-eth-contract";
 
-
 const createClass = async (web3: Web3, constract: Contract, classId: number, name: string) => {
     try {
         const accounts = await web3.eth.getAccounts();

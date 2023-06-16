@@ -1,9 +1,9 @@
 import React, {useContext, useState} from "react";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
-import schoolContract from "../../../contracts/School.json";
 import Web3 from "web3";
 import ServiceContext from "../../../ServiceContext";
 import {Contract} from "web3-eth-contract";
+
 
 const createStudent = async (web3: Web3, constract: Contract, classId: number, studentName: string, studentId: number, studentPassword: string) => {
     try {

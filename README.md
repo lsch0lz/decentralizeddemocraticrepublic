@@ -17,7 +17,9 @@ Furthermore, news from the school, such as new teachers, can also be stored. Thi
    - `cd contracts
    - `truffle compile`
    - `truffle migrate`
-4. Run webclient
+4. [Dev] Run test
+   - `npm test`
+5. Run webclient
    - `cd webclient`
    - `npm install` (when running for the first time)
    - `npm start`

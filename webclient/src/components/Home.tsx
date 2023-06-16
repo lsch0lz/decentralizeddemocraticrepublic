@@ -1,11 +1,12 @@
 import React, {useContext, useState} from 'react';
 import ServiceContext from "../ServiceContext";
 
+
 function Home() {
     let [value, setValue] = useState<String>()
 
     const web3Service = useContext(ServiceContext);
-    const [web3, contract] = web3Service.getHelloWorldContract();
+    const [, contract] = web3Service.getHelloWorldContract();
 
     console.log('contract', contract)
 
