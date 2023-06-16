@@ -1,5 +1,5 @@
 {
-  "name": "pet-shop",
+  "name": "DDR-decentralized-democratic-republic",
   "version": "1.0.0",
   "description": "",
   "main": "truffle.js",
@@ -10,8 +10,13 @@
     "dev": "lite-server",
     "test": "mocha"
   },
-  "author": "",
-  "license": "ISC",
+  "contributors": [
+    "Ferdinand Koenig",
+    "Lukas Scholz",
+    "Henry Baiker",
+    "Moritz Lindner"
+  ],
+  "license": "",
   "devDependencies": {
     "@types/uuid": "^9.0.1",
     "chai": "^4.3.7",
