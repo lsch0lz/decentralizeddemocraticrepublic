@@ -1,23 +1,15 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
-import schoolContract from "../../../contracts/School.json";
 import Web3 from "web3";
+import ServiceContext from "../../../ServiceContext";
+import {Contract} from "web3-eth-contract";
 
-const contractABI = schoolContract.abi;
-const contractAddress = '0x3fbC84CC8cc5366a218a2aB865cE4e0437c1B90b'; // Replace with your contract address
 
-const ganacheUrl = 'HTTP://127.0.0.1:7545';
-const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
-const web3 = new Web3(httpProvider);
-
-// @ts-ignore
-const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
-
-const createStudent = async (classId: number, studentName: string, studentId: number, studentPassword: string) => {
+const createStudent = async (web3: Web3, constract: Contract, classId: number, studentName: string, studentId: number, studentPassword: string) => {
     try {
         const accounts = await web3.eth.getAccounts();
         console.log('accounts:', accounts)
-        return await contractInstance.methods.addStudentToClass(
+        return await constract.methods.addStudentToClass(
             classId,
             studentName,
             studentId,
@@ -32,6 +24,8 @@ export function StudentCreation() {
     const [studentName, setStudentName] = useState('');
     const [studentPassword, setStudentPassword] = useState('');
     const [classId, setClassId] = useState('');
+    const web3Service = useContext(ServiceContext);
+    const [web3, contract] = web3Service.getSchoolContract();
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStudentName(e.target.value);
@@ -50,6 +44,8 @@ export function StudentCreation() {
         const studentId = 1
         // TODO: hash password
         createStudent(
+            web3,
+            contract,
             Number(classId),
             studentName,
             studentId,
