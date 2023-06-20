@@ -7,7 +7,6 @@ schoolsContractJson = require('./../build/contracts/School.json');
 
 // Set up a connection to your Ganache network
 const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
-const web3 = new Web3(provider);
 
 // Create a contract instance
 const SchoolsContract = contract(schoolsContractJson);
