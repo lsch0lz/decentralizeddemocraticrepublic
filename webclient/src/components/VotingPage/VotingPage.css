@@ -1,0 +1,10 @@
+.creation-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+h2 {
+    margin-top: 20px;
+}

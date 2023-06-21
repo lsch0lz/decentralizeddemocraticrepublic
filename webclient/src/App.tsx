@@ -7,6 +7,7 @@ import About from "./components/About";
 import Error from "./components/Error";
 import Navigation, {NavLinkItem} from "./components/Navigation";
 import CreationPage from "./components/CreationPage/CreationPage";
+import VotingPage from "./components/VotingPage/VotingPage";
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
         {text: 'About', path: '/about'},
         {text: 'Contact', path: '/contact'},
         {text: 'Login', path: '/login'},
-        {text: 'Create', path: '/create'}
+        {text: 'Create', path: '/create'},
+        {text: 'Voting', path: '/voting'}
     ];
 
 
@@ -27,6 +29,7 @@ function App() {
                     <Routes>
                         <Route path="/" Component={Home}/>
                         <Route path="/create" Component={CreationPage}/>
+                        <Route path="/voting" Component={VotingPage}/>
                         <Route path="/about" Component={About}/>
                         <Route path="/login" Component={Login}/>
                         <Route path="*" Component={Error}/>
