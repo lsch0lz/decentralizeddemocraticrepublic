@@ -3,11 +3,10 @@ const contract = require('truffle-contract');
 // const {context} = require("@truffle/contract/webpack.config");
 const expect = require('chai').expect
 
-schoolsContractJson = require('./../build/contracts/School.json');
+schoolsContractJson = require('./../build/contracts/');
 
 // Set up a connection to your Ganache network
 const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
-const web3 = new Web3(provider);
 
 // Create a contract instance
 const SchoolsContract = contract(schoolsContractJson);

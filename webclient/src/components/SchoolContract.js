@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 const contract = require('truffle-contract');
 
-const SchoolsContractJson = require('./../contracts/School.json');
+const SchoolsContractJson = require('../contracts/School.json');
 
 // Set up a connection to your Ganache network
 const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
@@ -11,7 +11,7 @@ const web3 = new Web3(provider);
 const SchoolsContract = contract(SchoolsContractJson);
 SchoolsContract.setProvider(provider);
 
-// Your Account
+// TODO: Set your account address here
 const account = '0x49D89eEAcB3951288937C862982d0e67fF020847';
 
 // Helper function to get deployed contract instance

@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {CustomFormLabel} from '../customInput/CustomFormLabel';
 import './ElectionCreation.css';
-import {createElection, getWinner, vote} from "SchoolContract";
+import createElection from "../../../blockchain/SchoolContract";
+import getWinner from "../../../blockchain/SchoolContract"
+import vote from "../../../blockchain/SchoolContract"
 
 interface OptionsFormProps {
     onSubmit: (options: string[]) => void;

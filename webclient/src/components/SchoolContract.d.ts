@@ -28,46 +28,72 @@ declare module 'SchoolContract' {
     }
 
     export function createSchool(_name: string): void;
+
     export function logIn(
         username: string,
         password: string,
         _school_name: string
     ): [boolean, string];
+
     export function createClass(_name: string, _school_name: string): void;
+
     export function addTeacherToClass(
         _teacherName: string,
         _password: string,
         class_name: string,
         _school_name: string
     ): void;
+
     export function addStudentToClass(
         _studentName: string,
         _password: string,
         class_name: string,
         _school_name: string
     ): void;
+
     export function getClassDetails(
         class_name: string,
         _school_name: string
     ): [number, number];
+
     export function getAllClasses(_school_name: string): string[];
+
     export function createElection(
         _electionId: number,
         _name: string,
         _options: string[],
         _school_name: string
     ): void;
+
     export function getElectionName(
         electionID: number,
         _school_name: string
     ): string;
+
     export function vote(
         electionID: number,
         option: string,
         _school_name: string
     ): void;
+
     export function getWinner(
         electionID: number,
         _school_name: string
     ): [string, number];
+
+    const SchoolContract: {
+        createSchool: typeof createSchool;
+        logIn: typeof logIn;
+        createClass: typeof createClass;
+        addTeacherToClass: typeof addTeacherToClass;
+        addStudentToClass: typeof addStudentToClass;
+        getClassDetails: typeof getClassDetails;
+        getAllClasses: typeof getAllClasses;
+        createElection: typeof createElection;
+        getElectionName: typeof getElectionName;
+        vote: typeof vote;
+        getWinner: typeof getWinner;
+    };
+
+    export default SchoolContract;
 }
