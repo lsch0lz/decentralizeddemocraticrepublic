@@ -1,8 +1,9 @@
 import React, {useContext, useState} from "react";
-import {CustomFormLabelVoting} from "../customInput/CustomFormLabelVoting";
+
 import Web3 from "web3";
-import ServiceContext from "../../../ServiceContext";
+
 import {Contract} from "web3-eth-contract";
+import ServiceContext from "../../ServiceContext";
 
 const createClass = async (web3: Web3, constract: Contract, classId: number, name: string) => {
     try {
@@ -14,7 +15,7 @@ const createClass = async (web3: Web3, constract: Contract, classId: number, nam
     }
 };
 
-export function Voting() {
+export function VotingButton() {
     const [className, setClassName] = useState('');
     const web3Service = useContext(ServiceContext);
     let [web3, contract] = web3Service.getSchoolContract();
@@ -44,4 +45,4 @@ export function Voting() {
 
 }
 
-export default Voting;
+export default VotingButton;

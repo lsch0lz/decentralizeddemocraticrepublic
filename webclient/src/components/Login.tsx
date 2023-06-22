@@ -42,7 +42,7 @@ export const LoginPage: React.FC = () => {
             console.log('Login successful');
             setShowSuccessMessage(true);
             setLoginError(false);
-            setCurrentRole(Role.Student)
+            setCurrentRole(Role.Principal)
         } else {
             // Failed login
             console.log('Login failed');

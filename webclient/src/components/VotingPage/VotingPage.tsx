@@ -1,31 +1,27 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useState} from 'react';
 import './VotingPage.css';
-import Dropdown, { DropdownOption } from './dropdown/Dropdown';
-import Voting from './creationforms/Voting';
-import RoleContext, { Role } from '../RoleContext';
+import VotingButton from './VotingButton';
+import RoleContext from '../RoleContext';
 import SignInInfoMessage from "../SignInInfoMessage";
+import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
 
 function CreationPage() {
-    const { currentRole } = useContext(RoleContext);
+    const {currentRole} = useContext(RoleContext);
 
-    const teacherOptions: string[] = ['Student', 'Election'];
-
-    const studentOptions: string[] = ['Election'];
-
-    const possibleElectionOptions: DropdownOption[] = [
-        { value: 'Vote', label: 'Klassensprecher' },
-        { value: 'Vote', label: 'Klassenfahrt' },
-        { value: 'Vote', label: 'Schulsprecher' },
+    const currentElections: DropdownOption[] = [
+        {value: 'Election Klassensprecher', label: 'Klassensprecher'},
+        {value: 'Election Klassenfahrt', label: 'Klassenfahrt'},
+        {value: 'Election Schulsprecher', label: 'Schulsprecher'},
     ];
 
     const possibleVoteOptions: DropdownOption[] = [
-        { value: 'Vote', label: 'Klassensprecher' },
-        { value: 'Vote', label: 'Klassenfahrt' },
-        { value: 'Vote', label: 'Schulsprecher' },
+        {value: 'Vote 1', label: 'Klassensprecher'},
+        {value: 'Vote 2', label: 'Klassenfahrt'},
+        {value: 'Vote 3', label: 'Schulsprecher'},
     ];
 
-    const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption | undefined>(
-        possibleElectionOptions[0]
+    const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption>(
+        currentElections[0]
     );
 
     const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption | undefined>(
@@ -33,10 +29,12 @@ function CreationPage() {
     );
 
     const handleSelect = (value: string) => {
-        const selectedElection = possibleElectionOptions.find((option) => option.value === value);
-        setSelectedElectionOption(selectedElection);
-        const selectedVote = possibleVoteOptions.find((option) => option.value === value);
-        setSelectedVoteOption(selectedVote);
+        console.log(value)
+        const selectedElection = currentElections.find((option) => option.value === value);
+        console.log(selectedElection)
+        if (selectedElection !== undefined) {
+            setSelectedElectionOption(selectedElection);
+        }
     };
 
     function isUserLoggedIn() {
@@ -46,19 +44,18 @@ function CreationPage() {
     function PossibleSelections() {
         return (
             <div>
-                <Dropdown options={possibleElectionOptions} onSelect={handleSelect} />
-                <Dropdown options={possibleVoteOptions} onSelect={handleSelect} />
-                {renderSelectedOptionContent()}
+                <Dropdown options={currentElections} onSelect={handleSelect} selectedValue={selectedElectionOption}/>
+                {/*<Dropdown options={possibleVoteOptions} onSelect={handleSelect} />*/}
+                {/*{renderSelectedOptionContent()}*/}
             </div>
         );
     }
 
 
-
     const renderSelectedOptionContent = () => {
         switch (selectedElectionOption?.value) {
             case 'Vote':
-                return <Voting />;
+                return <VotingButton/>;
             default:
                 return null;
         }
@@ -66,7 +63,7 @@ function CreationPage() {
 
     return (
         <div className="creation-page-container"> {/* Apply the container class */}
-            {!isUserLoggedIn() ? <SignInInfoMessage /> : <PossibleSelections />}
+            {!isUserLoggedIn() ? <SignInInfoMessage/> : <PossibleSelections/>}
         </div>
     );
 }

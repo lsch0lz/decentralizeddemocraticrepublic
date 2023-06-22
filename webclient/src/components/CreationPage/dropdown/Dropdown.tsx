@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 export interface DropdownOption {
     value: string;
@@ -8,19 +8,19 @@ export interface DropdownOption {
 interface DropdownProps {
     options: DropdownOption[];
     onSelect: (value: string) => void;
+    selectedValue: DropdownOption
 }
 
 function Dropdown(props: DropdownProps) {
-    let {options, onSelect} = props;
-    const [selectedValue, setSelectedValue] = useState('');
+    let {options, onSelect, selectedValue} = props;
 
-    const handleSelect = (value: string) => {
-        setSelectedValue(value);
-        onSelect(value);
+    const handleSelect = (value: React.ChangeEvent<HTMLSelectElement>) => {
+        onSelect(value.target.value);
     };
 
+
     return (
-        <select value={selectedValue} onChange={(e) => handleSelect(e.target.value)}>
+        <select value={selectedValue.value} onChange={(e) => handleSelect(e)}>
             {options.map((option) => (
                 <option key={option.value} value={option.value}>{option.label}</option>
             ))}
