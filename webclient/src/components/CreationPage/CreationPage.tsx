@@ -7,6 +7,7 @@ import { TeacherCreation } from './creationforms/TeacherCreation';
 import { StudentCreation } from './creationforms/StudentCreation';
 import { ElectionCreation } from './creationforms/ElectionCreation';
 import RoleContext, { Role } from '../RoleContext';
+import SignInInfoMessage from "../SignInInfoMessage";
 
 function CreationPage() {
     const { currentRole } = useContext(RoleContext);
@@ -54,10 +55,6 @@ function CreationPage() {
                 {renderSelectedOptionContent()}
             </div>
         );
-    }
-
-    function SignInInfoMessage() {
-        return <h2>You need to be signed in to create something</h2>;
     }
 
     const renderSelectedOptionContent = () => {

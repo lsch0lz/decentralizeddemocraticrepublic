@@ -3,6 +3,7 @@ import './VotingPage.css';
 import Dropdown, { DropdownOption } from './dropdown/Dropdown';
 import Voting from './creationforms/Voting';
 import RoleContext, { Role } from '../RoleContext';
+import SignInInfoMessage from "../SignInInfoMessage";
 
 function CreationPage() {
     const { currentRole } = useContext(RoleContext);
@@ -52,9 +53,7 @@ function CreationPage() {
         );
     }
 
-    function SignInInfoMessage() {
-        return <h2>You need to be signed in to create something</h2>;
-    }
+
 
     const renderSelectedOptionContent = () => {
         switch (selectedElectionOption?.value) {
