@@ -1,6 +1,5 @@
-import React, {useContext, useState} from 'react';
+import React, {MouseEventHandler, useContext, useState} from 'react';
 import './VotingPage.css';
-import VotingButton from './VotingButton';
 import RoleContext from '../RoleContext';
 import SignInInfoMessage from "../SignInInfoMessage";
 import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
@@ -8,34 +7,49 @@ import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
 function CreationPage() {
     const {currentRole} = useContext(RoleContext);
 
+    // TODO: get current elections from backend
     const currentElections: DropdownOption[] = [
         {value: 'Election Klassensprecher', label: 'Klassensprecher'},
         {value: 'Election Klassenfahrt', label: 'Klassenfahrt'},
         {value: 'Election Schulsprecher', label: 'Schulsprecher'},
     ];
 
+    // TODO: get possible vote options from backend
     const possibleVoteOptions: DropdownOption[] = [
-        {value: 'Vote 1', label: 'Klassensprecher'},
-        {value: 'Vote 2', label: 'Klassenfahrt'},
-        {value: 'Vote 3', label: 'Schulsprecher'},
+        {value: 'Vote 1', label: 'Option 1'},
+        {value: 'Vote 2', label: 'Option 2'},
+        {value: 'Vote 3', label: 'Option 3'},
     ];
 
     const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption>(
         currentElections[0]
     );
 
-    const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption | undefined>(
+    const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption>(
         possibleVoteOptions[0]
     );
 
-    const handleSelect = (value: string) => {
+    const handleElectionSelect = (value: string) => {
         console.log(value)
         const selectedElection = currentElections.find((option) => option.value === value);
         console.log(selectedElection)
         if (selectedElection !== undefined) {
             setSelectedElectionOption(selectedElection);
         }
+
+        // TODO: get possible vote options from backend and put them into possibleVoteOptions
     };
+
+    const handleVoteSelect = (value: string) => {
+        const selectedVote = possibleVoteOptions.find((option) => option.value === value);
+        if (selectedVote !== undefined) {
+            setSelectedVoteOption(selectedVote);
+        }
+    }
+
+    const handleVote = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
+        // TODO: send vote to backend
+    }
 
     function isUserLoggedIn() {
         return currentRole !== null;
@@ -44,22 +58,13 @@ function CreationPage() {
     function PossibleSelections() {
         return (
             <div>
-                <Dropdown options={currentElections} onSelect={handleSelect} selectedValue={selectedElectionOption}/>
-                {/*<Dropdown options={possibleVoteOptions} onSelect={handleSelect} />*/}
-                {/*{renderSelectedOptionContent()}*/}
+                <Dropdown options={currentElections} onSelect={handleElectionSelect} selectedValue={selectedElectionOption}/>
+                <Dropdown options={possibleVoteOptions} onSelect={handleVoteSelect} selectedValue={selectedVoteOption}/>
+                <button onClick={handleVote} >Vote</button>
             </div>
         );
     }
 
-
-    const renderSelectedOptionContent = () => {
-        switch (selectedElectionOption?.value) {
-            case 'Vote':
-                return <VotingButton/>;
-            default:
-                return null;
-        }
-    };
 
     return (
         <div className="creation-page-container"> {/* Apply the container class */}
