@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
-import createClass from "../../../blockchain/SchoolContract";
+
 
 // const createClass = async (web3: Web3, constract: Contract, classId: number, name: string) => {
 //     try {
@@ -21,13 +21,13 @@ export function ClassCreation() {
 
 
     const saveToChain = () => {
-        // TODO: ClassId?, Woher Schoolname?
-        createClass(
-            "Name",
-            "schoolname"
-        ).then(() => {
-            console.log('Class created');
-        });
+        // // TODO: ClassId?, Woher Schoolname?
+        // createClass(
+        //     "Name",
+        //     "schoolname"
+        // ).then(() => {
+        //     console.log('Class created');
+        // });
     }
 
     return (

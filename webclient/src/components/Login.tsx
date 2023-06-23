@@ -1,7 +1,8 @@
 import React, {useContext, useState} from 'react';
 import RoleContext, {Role} from "./RoleContext";
 import './LoginPage.css';
-import SchoolContract from "SchoolContract";
+import {login} from "./Contract";
+
 
 export function LoginPage() {
     const [username, setUsername] = useState('');
@@ -14,7 +15,9 @@ export function LoginPage() {
     const handleLogin = () => {
 
         // TODO: call chain like this (no time time to implement)
-        SchoolContract.logIn(username, password, "SchoolName")
+        login(username, password, "JMG").then(r =>
+            console.log(r)
+        ).catch(e => console.log(e))
 
         // Check if username and password match the value from App.tsx
         if (username === 'example' && password === 'password') {
@@ -22,7 +25,7 @@ export function LoginPage() {
             console.log('Login successful');
             setShowSuccessMessage(true);
             setLoginError(false);
-            setCurrentRole(Role.Student)
+            setCurrentRole(Role.Principal)
         } else {
             // Failed login
             console.log('Login failed');

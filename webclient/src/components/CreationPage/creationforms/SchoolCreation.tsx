@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './SchoolCreation.css';
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
-import createSchool from '../../../blockchain/SchoolContract';
+import {createSchool} from "../../Contract";
 
 function SchoolCreation() {
     const [schoolName, setSchoolName] = useState('');
@@ -10,7 +10,8 @@ function SchoolCreation() {
         setSchoolName(e.target.value);
     };
 
-    const saveToChain = () => {
+    const saveToChain = (e: React.FormEvent) => {
+        e.preventDefault()
         createSchool(schoolName)
             .then(() => {
                 console.log('School created');
