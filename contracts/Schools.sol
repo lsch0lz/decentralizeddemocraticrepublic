@@ -22,7 +22,7 @@ contract School {
         address principal;
         string[] class_names; // keys for classes
         mapping(string => Class) classes;
-        mapping(uint256 => Election) elections;
+        mapping(string => Election) elections;
     }
 
     struct Election {
@@ -126,7 +126,7 @@ contract School {
 
 
     // ELECTION
-    function createElection(uint256 _electionId, string memory _name, string[] memory _options, string memory _school_name) public {
+    function createElection(string memory _electionId, string memory _name, string[] memory _options, string memory _school_name) public {
         SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         // Check if the school exists
@@ -140,14 +140,14 @@ contract School {
         }
     }
 
-    function getElectionName(uint256 electionID, string memory _school_name) public view returns (string memory){
+    function getElectionName(string memory electionID, string memory _school_name) public view returns (string memory){
         SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         Election storage election = school.elections[electionID];
         return election.name;
     }
 
-    function vote(uint256 electionID, string memory option, string memory _school_name) public {
+    function vote(string memory electionID, string memory option, string memory _school_name) public {
         SchoolData storage school = schools[_school_name];
         require(school.principal != address(0), "School does not exist");
         Election storage election = school.elections[electionID];
@@ -156,7 +156,7 @@ contract School {
         election.electionResults[option] += 1;
     }
 
-    function getWinner(uint256 electionID, string memory _school_name) public view returns (string memory, uint256) {
+    function getWinner(string memory electionID, string memory _school_name) public view returns (string memory, uint256) {
         SchoolData storage school = schools[_school_name];
         Election storage election = school.elections[electionID];
         uint256 maxResult = 0;

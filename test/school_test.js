@@ -13,7 +13,7 @@ const SchoolsContract = contract(schoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // Your Account
-const account = "0x49D89eEAcB3951288937C862982d0e67fF020847";
+const account = "0x5E6549598606eF80633d0374EE80928c8Ef68e24";
 
 describe('Tests for School Contract\n'
     + '(Creation is only possible the first time)', () => {
@@ -50,7 +50,7 @@ describe('Tests for School Contract\n'
   });
 
   context('[Test] Election', () => {
-    const election_id = 420;
+    const election_id = "420";
     const election_name = "Presidential election"
     const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
