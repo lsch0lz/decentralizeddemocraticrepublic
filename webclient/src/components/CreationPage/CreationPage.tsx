@@ -61,20 +61,25 @@ function CreationPage() {
     }
 
     const renderSelectedOptionContent = () => {
-        switch (selectedOption?.value) {
-            case 'School':
-                return <SchoolCreation />;
-            case 'Class':
-                return <ClassCreation />;
-            case 'Teacher':
-                return <TeacherCreation />;
-            case 'Student':
-                return <StudentCreation />;
-            case 'Election':
-                return <ElectionCreation />;
-            default:
-                return null;
+        if (selectedOption && selectedOption.value) {
+            switch (selectedOption.value) {
+                case 'School':
+                    return <SchoolCreation />;
+                case 'Class':
+                    return <ClassCreation />;
+                case 'Teacher':
+                    return <TeacherCreation />;
+                case 'Student':
+                    return <StudentCreation />;
+                case 'Election':
+                    return <ElectionCreation />;
+                default:
+                    return null;
+            }
         }
+
+        return null
+
     };
 
     return (

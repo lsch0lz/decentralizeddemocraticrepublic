@@ -1,32 +1,10 @@
 import React, {useContext, useState} from 'react';
-import Web3 from "web3";
-import schoolContract from "../contracts/School.json";
 import RoleContext, {Role} from "./RoleContext";
 import './LoginPage.css';
-
-const contractABI = schoolContract.abi;
-const contractAddress = '0x3fbC84CC8cc5366a218a2aB865cE4e0437c1B90b'; // Replace with your contract address
-
-const ganacheUrl = 'HTTP://127.0.0.1:7545';
-const httpProvider = new Web3.providers.HttpProvider(ganacheUrl);
-const web3 = new Web3(httpProvider);
+import {login} from "./Contract";
 
 
-const log_in = async (studentName: string, password: string) => {
-    try {
-        return await contractInstance.methods.log_in(
-            studentName,
-            password
-        ).call()
-    } catch (error) {
-        console.error('Failed to log in:', error);
-    }
-};
-
-// @ts-ignore
-const contractInstance = new web3.eth.Contract(contractABI, contractAddress);
-
-export const LoginPage: React.FC = () => {
+export function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState(false);
@@ -34,15 +12,20 @@ export const LoginPage: React.FC = () => {
 
     const {currentRole, setCurrentRole} = useContext(RoleContext);
 
-
     const handleLogin = () => {
+
+        // TODO: call chain like this (no time time to implement)
+        login(username, password, "JMG").then(r =>
+            console.log(r)
+        ).catch(e => console.log(e))
+
         // Check if username and password match the value from App.tsx
         if (username === 'example' && password === 'password') {
             // Successful login
             console.log('Login successful');
             setShowSuccessMessage(true);
             setLoginError(false);
-            setCurrentRole(Role.Student)
+            setCurrentRole(Role.Principal)
         } else {
             // Failed login
             console.log('Login failed');
@@ -81,6 +64,6 @@ export const LoginPage: React.FC = () => {
             <button className="login-button" onClick={handleLogin}>Login</button>
         </div>
     );
-};
+}
 
 export default LoginPage;
