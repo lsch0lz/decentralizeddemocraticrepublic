@@ -20,8 +20,11 @@ contract School {
 
     struct SchoolData {
         address principal;
+
         string[] class_names; // keys for classes
         mapping(string => Class) classes;
+
+        string[] election_keys;
         mapping(string => Election) elections;
     }
 
@@ -132,6 +135,7 @@ contract School {
         // Check if the school exists
         Election storage election = school.elections[_electionId];
         // TODO check if election exists
+        school.election_keys.push(_electionId);
         election.name = _name;
         election.keys = _options;
         // add options to election
@@ -156,8 +160,23 @@ contract School {
         election.electionResults[option] += 1;
     }
 
+    function getAllElectionIDs(string memory _school_name) public view returns (string[] memory) {
+        SchoolData storage school = schools[_school_name];
+        require(school.principal != address(0), "School does not exist");
+        return school.election_keys;
+    }
+
+    function getOptionsFromElection(string memory electionID, string memory _school_name) public view returns (string[] memory) {
+        SchoolData storage school = schools[_school_name];
+        require(school.principal != address(0), "School does not exist");
+        Election storage election = school.elections[electionID];
+
+        return election.keys;
+    }
+
     function getWinner(string memory electionID, string memory _school_name) public view returns (string memory, uint256) {
         SchoolData storage school = schools[_school_name];
+        require(school.principal != address(0), "School does not exist");
         Election storage election = school.elections[electionID];
         uint256 maxResult = 0;
         string memory maxKey;
