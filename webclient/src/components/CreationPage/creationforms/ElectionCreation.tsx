@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {CustomFormLabel} from '../customInput/CustomFormLabel';
 import './ElectionCreation.css';
+import {createElection, getElectionWinner, voteInElection} from "../../Contract";
 
 
 interface OptionsFormProps {
@@ -34,20 +35,27 @@ export function ElectionCreation() {
     };
 
     const saveToChain = async (e: React.FormEvent) => {
-        // e.preventDefault();
+        e.preventDefault();
         // // TODO: Save to chain
-        // console.log('Saving election to chain with name:', electionName)
-        // console.log('Saving election to chain with options:', optionsList)
+        await createElection("1", electionName, optionsList, "JMG");
+        console.log('Saving election to chain with name:', electionName)
+        console.log('Saving election to chain with options:', optionsList)
         //
         // // TODO: Fill with correct values
-        // await createElection(1, electionName, optionsList, "");
-        // console.log("Saved election to chain", electionName)
-        // console.log("Getting election from chain", electionName)
-        //
+        await voteInElection("1", 0, "JMG").then((e:any) => {
+            console.log('Voted in election', e);
+        })
+        await voteInElection("1", 0, "JMG").then((e:any) => {
+            console.log('Voted in election', e);
+        })
+        await voteInElection("1", 1, "JMG").then((e:any) => {
+            console.log('Voted in election', e);
+        })
+
         // // TODO: Fill with correct values
-        // await vote(1, "1", "")
-        //
-        // // TODO: Fill with correct values
+        getElectionWinner("1", "JMG").then((e:any) => {
+            console.log('Got election winner', e);
+        })
         // const result = await getWinner(1, "");
         // console.log("Got election from chain", result)
     };
