@@ -1,29 +1,9 @@
 import React, {useContext, useState} from "react"
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
-import Web3 from "web3";
-import ServiceContext from "../../../ServiceContext";
-import {Contract} from "web3-eth-contract";
-
-
-const createTeacher = async (web3: Web3, constract: Contract, classId: number, teacherName: string, teacherId: number) => {
-    try {
-        const accounts = await web3.eth.getAccounts();
-        console.log('accounts:', accounts)
-        return await constract.methods.addTeacherToClass(
-            classId,
-            teacherName,
-            teacherId
-        ).send({from: accounts[0]})
-    } catch (error) {
-        console.error('Failed to create school:', error);
-    }
-};
 
 export function TeacherCreation() {
     const [teacherName, setTeacherName] = useState('');
     const [classId, setClassId] = useState('');
-    const web3Service = useContext(ServiceContext);
-    const [web3, contract] = web3Service.getSchoolContract();
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTeacherName(event.target.value);
@@ -38,17 +18,7 @@ export function TeacherCreation() {
         // TODO: Save to chain
         const teacherId = 1
 
-        createTeacher(
-            web3,
-            contract,
-            Number(classId),
-            teacherName,
-            teacherId
-        ).then(r =>
-            console.log('Teacher created:', r)
-        ).catch(e =>
-            console.log('Failed to create teacher:', e)
-        )
+        // TODO: call function
     }
 
     return (
