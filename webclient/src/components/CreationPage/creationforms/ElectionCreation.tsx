@@ -37,24 +37,24 @@ export function ElectionCreation() {
     const saveToChain = async (e: React.FormEvent) => {
         e.preventDefault();
         // // TODO: Save to chain
-        await createElection("1", electionName, optionsList, "JMG");
+        await createElection("2", electionName, optionsList, "JMG");
         console.log('Saving election to chain with name:', electionName)
         console.log('Saving election to chain with options:', optionsList)
         //
         // // TODO: Fill with correct values
-        await voteInElection("1", 0, "JMG").then((e:any) => {
+        await voteInElection("2", optionsList[0], "JMG").then((e:any) => {
             console.log('Voted in election', e);
         })
-        await voteInElection("1", 0, "JMG").then((e:any) => {
+        await voteInElection("2", optionsList[0], "JMG").then((e:any) => {
             console.log('Voted in election', e);
         })
-        await voteInElection("1", 1, "JMG").then((e:any) => {
+        await voteInElection("2", optionsList[1], "JMG").then((e:any) => {
             console.log('Voted in election', e);
         })
 
         // // TODO: Fill with correct values
-        getElectionWinner("1", "JMG").then((e:any) => {
-            console.log('Got election winner', e);
+        await getElectionWinner("2", "JMG").then((e:any) => {
+            console.log('Got election winner', e[0]);
         })
         // const result = await getWinner(1, "");
         // console.log("Got election from chain", result)

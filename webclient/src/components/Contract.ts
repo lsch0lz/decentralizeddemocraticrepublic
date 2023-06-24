@@ -13,7 +13,7 @@ const SchoolsContract = contract(SchoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // TODO: Set your account address here
-const account = '0x31490D5cC5Ea8B182F981b348357a7Fe0B87e8F0';
+const account = '0x5E6549598606eF80633d0374EE80928c8Ef68e24';
 
 // Helper function to get deployed contract instance
 async function getSchoolsContractInstance(): Promise<any> {
@@ -58,7 +58,7 @@ async function createElection(
 }
 
 // Function to vote in an election
-async function voteInElection(electionId: string, option: number, schoolName: string): Promise<any> {
+async function voteInElection(electionId: string, option: string, schoolName: string): Promise<any> {
     const instance = await getSchoolsContractInstance();
     await instance.vote(electionId, option, schoolName, { from: account });
 }
