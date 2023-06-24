@@ -13,7 +13,7 @@ const SchoolsContract = contract(schoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // Your Account
-const account = "0x62eD2b812F7844A95802C1fBb29d96E755a46819";
+const account = "0xD15605F188DA4a345AB3967098D828BfD9391a11";
 
 describe('Tests for School Contract\n'
     + '(Creation is only possible the first time)', () => {
@@ -51,12 +51,35 @@ describe('Tests for School Contract\n'
 
   context('[Test] Election', () => {
     const election_id = "420";
+    const election_id2 = "187";
     const election_name = "Presidential election"
+    const election_name2 = "Sexiest man alive contest"
     const election_options = ["Lukas", "Henry", "Moritz", "Ferdinand"]
 
-    it('Create Election', async () => {
+    it('Create Election #1', async () => {
       const instance = await SchoolsContract.deployed();
       await instance.createElection(election_id, election_name, election_options, schoolName, {from: account });
+    });
+
+    it('Create Election #2', async () => {
+      const instance = await SchoolsContract.deployed();
+      await instance.createElection(election_id2, election_name2, election_options, schoolName, {from: account });
+    });
+
+    it('Read all elections' , async () => {
+      const instance = await SchoolsContract.deployed();
+      const results = await instance.getAllElectionIDs(schoolName, {from: account});
+
+      expect(results).to.include(election_id);
+      expect(results).to.include(election_id2);
+    });
+
+    it('Read options of one election', async () => {
+      const instance = await SchoolsContract.deployed();
+      const results = await instance.getOptionsFromElection(election_id, schoolName, {from: account});
+
+      expect(results).to.be.an('array');
+      expect(results).to.deep.equal(election_options);
     });
 
     it('Vote (Create)', async () => {
