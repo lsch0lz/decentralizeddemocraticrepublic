@@ -40,24 +40,6 @@ export function ElectionCreation() {
         await createElection("2", electionName, optionsList, "JMG");
         console.log('Saving election to chain with name:', electionName)
         console.log('Saving election to chain with options:', optionsList)
-        //
-        // // TODO: Fill with correct values
-        await voteInElection("2", optionsList[0], "JMG").then((e:any) => {
-            console.log('Voted in election', e);
-        })
-        await voteInElection("2", optionsList[0], "JMG").then((e:any) => {
-            console.log('Voted in election', e);
-        })
-        await voteInElection("2", optionsList[1], "JMG").then((e:any) => {
-            console.log('Voted in election', e);
-        })
-
-        // // TODO: Fill with correct values
-        await getElectionWinner("2", "JMG").then((e:any) => {
-            console.log('Got election winner', e[0]);
-        })
-        // const result = await getWinner(1, "");
-        // console.log("Got election from chain", result)
     };
 
     return (

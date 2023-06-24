@@ -3,6 +3,7 @@ import './VotingPage.css';
 import RoleContext from '../RoleContext';
 import SignInInfoMessage from "../SignInInfoMessage";
 import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
+import {getElectionWinner, voteInElection} from "../Contract";
 
 function CreationPage() {
     const {currentRole} = useContext(RoleContext);
@@ -12,13 +13,15 @@ function CreationPage() {
         {value: 'Election Klassensprecher', label: 'Klassensprecher'},
         {value: 'Election Klassenfahrt', label: 'Klassenfahrt'},
         {value: 'Election Schulsprecher', label: 'Schulsprecher'},
+        {value: 'Election Test', label: 'Schulsprecher'},
     ];
 
     // TODO: get possible vote options from backend
     const possibleVoteOptions: DropdownOption[] = [
-        {value: 'Vote 1', label: 'Option 1'},
-        {value: 'Vote 2', label: 'Option 2'},
-        {value: 'Vote 3', label: 'Option 3'},
+        {value: 'Vote 1', label: 'Lukas'},
+        {value: 'Vote 2', label: 'Henry'},
+        {value: 'Vote 3', label: 'Ferdinand'},
+        {value: 'Vote 4', label: 'Moritz'},
     ];
 
     const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption>(
@@ -28,6 +31,8 @@ function CreationPage() {
     const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption>(
         possibleVoteOptions[0]
     );
+
+    const [electionID, setElectionID] = useState("");
 
     const handleElectionSelect = (value: string) => {
         console.log(value)
@@ -47,8 +52,15 @@ function CreationPage() {
         }
     }
 
-    const handleVote = (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO: send vote to backend
+    const handleVote = async (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
+        const inputField = document.querySelector('input[name="electionID"]') as HTMLInputElement;
+        const electionID = inputField.value;
+
+        // TODO: get electionID and selctedVoteOption from Backend
+        await voteInElection(electionID, selectedVoteOption.label, "JMG")
+        await getElectionWinner(electionID, "JMG").then((e:any) => {
+            console.log('Got election winner', e[0]);
+        })
     }
 
     function isUserLoggedIn() {
@@ -58,6 +70,7 @@ function CreationPage() {
     function PossibleSelections() {
         return (
             <div>
+                <input type="electionID" name="electionID"/>
                 <Dropdown options={currentElections} onSelect={handleElectionSelect} selectedValue={selectedElectionOption}/>
                 <Dropdown options={possibleVoteOptions} onSelect={handleVoteSelect} selectedValue={selectedVoteOption}/>
                 <button onClick={handleVote} >Vote</button>
