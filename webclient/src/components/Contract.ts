@@ -77,6 +77,20 @@ async function getElectionName(electionId: string, schoolName: string): Promise<
     return res;
 }
 
+// Function to get all ElectionIDs
+export async function getAllElectionIDs(schoolName: string): Promise<any> {
+    const instance = await getSchoolsContractInstance();
+    const res = await instance.getAllElectionIDs(schoolName, { from: account });
+    return res;
+}
+
+// Function to get Options of an Election
+export async function getOptionsFromElection(electionId: string, schoolName: string): Promise<any> {
+    const instance = await getSchoolsContractInstance();
+    const res = await instance.getOptionsFromElection(electionId, schoolName, {from: account});
+    return res;
+}
+
 // Function to add a teacher to a class
 async function addTeacherToClass(
     teacherName: string,
