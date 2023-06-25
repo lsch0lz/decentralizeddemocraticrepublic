@@ -13,7 +13,7 @@ const SchoolsContract = contract(SchoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // TODO: Set your account address here
-const account = '0xc3BF693DEc058DcaCf91F55EA43295DD1f57DC21';
+const account = '0xBbF5358a14673cc68f24507E9f1153Bf429ed105';
 
 // Helper function to get deployed contract instance
 async function getSchoolsContractInstance(): Promise<any> {
@@ -78,14 +78,14 @@ async function getElectionName(electionId: string, schoolName: string): Promise<
 }
 
 // Function to get all ElectionIDs
-export async function getAllElectionIDs(schoolName: string): Promise<any> {
+async function getAllElectionIDs(schoolName: string): Promise<any> {
     const instance = await getSchoolsContractInstance();
     const res = await instance.getAllElectionIDs(schoolName, { from: account });
     return res;
 }
 
 // Function to get Options of an Election
-export async function getOptionsFromElection(electionId: string, schoolName: string): Promise<any> {
+async function getOptionsFromElection(electionId: string, schoolName: string): Promise<any> {
     const instance = await getSchoolsContractInstance();
     const res = await instance.getOptionsFromElection(electionId, schoolName, {from: account});
     return res;
@@ -122,6 +122,8 @@ async function login(username: string, password: string, schoolName: string): Pr
 }
 
 export {
+    getAllElectionIDs,
+    getOptionsFromElection,
     createSchool,
     createClass,
     getClassDetails,
