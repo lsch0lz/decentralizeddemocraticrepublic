@@ -1,43 +1,19 @@
-import React, {MouseEventHandler, useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './VotingPage.css';
 import RoleContext from '../RoleContext';
 import SignInInfoMessage from "../SignInInfoMessage";
 import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
-import {getElectionWinner, voteInElection, getAllElectionIDs, getOptionsFromElection, getElectionName} from "../Contract";
+import {getAllElectionIDs, getElectionName, getElectionWinner, voteInElection} from "../Contract";
 
 function CreationPage() {
     const {currentRole} = useContext(RoleContext);
 
-    // TODO: get current elections from backend
-    const currentElections_ids = async () => await getAllElectionIDs("JMG");
-    console.log(currentElections_ids)
-    currentElections_ids()
-        .then(async (ids: string[]) => {
-            const electionNames: Promise<string>[] = ids.map(async (id: string) => {
-                const name: any = await getElectionName(id, "JMG");
-                return String(name);
-            });
+    let [currentElections, setCurrentElections] = useState<DropdownOption[]>([]);
 
-            return Promise.all(electionNames);
-        })
-        .then((resolvedNames: string[]) => {
-            const currentElections_test: DropdownOption[] = resolvedNames.map((name: string) => ({
-                value: `Election ${name}`,
-                label: name
-            }));
+    const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption | undefined>(
+        undefined
+    );
 
-            console.log(currentElections_test);
-        })
-        .catch((error: any) => {
-            console.error('Error occurred:', error);
-        });
-
-    const currentElections: DropdownOption[] = [
-        {value: 'Election Klassensprecher', label: 'Klassensprecher'},
-        {value: 'Election Klassenfahrt', label: 'Klassenfahrt'},
-        {value: 'Election Schulsprecher', label: 'Schulsprecher'},
-        {value: 'Election Test', label: 'Schulsprecher'},
-    ];
 
     // TODO: get possible vote options from backend
     const possibleVoteOptions: DropdownOption[] = [
@@ -47,24 +23,69 @@ function CreationPage() {
         {value: 'Vote 4', label: 'Moritz'},
     ];
 
-    const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption>(
-        currentElections[0]
-    );
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const currentElectionIds = await getAllElectionIDs("JMG");
+                const electionNames = await Promise.all(currentElectionIds.map((id: string) => getElectionName(id, "JMG")));
 
-    const possibleVoteOptions_names = async () => await getOptionsFromElection(selectedElectionOption.label, "JMG");
+                console.log(electionNames)
 
-    possibleVoteOptions_names()
-        .then((names: string[]) => {
-            const possibleVoteOptions_test: DropdownOption[] = names.map((name: string, index: number) => ({
-                value: `Vote ${index}`,
-                label: name
-            }));
+                const updatedElections = electionNames.map((name, index) => ({
+                    value: `Election ${name}`,
+                    label: currentElectionIds[index]
+                }));
 
-            console.log(possibleVoteOptions_test);
-        })
-        .catch((error: any) => {
-            console.error('Error occurred:', error);
-        });
+
+                setCurrentElections(updatedElections);
+                setSelectedElectionOption(updatedElections[0]);
+                console.log("updatedElections: ", updatedElections)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []); // Empty dependency array ensures the effect runs only once
+
+
+    // currentElections_ids()
+    //     .then((ids: string[]) => {
+    //
+    //         const electionNames: Promise<string>[] = ids.map((id: string) => {
+    //             const name = getElectionName(id, "JMG");
+    //             return String(name);
+    //         });
+
+    // return Promise.all(electionNames);
+    // })
+    // .then((resolvedNames: string[]) => {
+    //     const currentElections_test: DropdownOption[] = resolvedNames.map((name: string) => ({
+    //         value: `Election ${name}`,
+    //         label: name
+    //     }));
+    //
+    //     console.log(currentElections_test);
+    // })
+    // .catch((error: any) => {
+    //     console.error('Error occurred:', error);
+    // });
+
+
+    // const possibleVoteOptions_names = async () => await getOptionsFromElection(selectedElectionOption.label, "JMG");
+    //
+    // possibleVoteOptions_names()
+    //     .then((names: string[]) => {
+    //         const possibleVoteOptions_test: DropdownOption[] = names.map((name: string, index: number) => ({
+    //             value: `Vote ${index}`,
+    //             label: name
+    //         }));
+    //
+    //         console.log(possibleVoteOptions_test);
+    //     })
+    //     .catch((error: any) => {
+    //         console.error('Error occurred:', error);
+    //     });
 
 
     const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption>(
