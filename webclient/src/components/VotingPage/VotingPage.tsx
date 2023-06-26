@@ -52,7 +52,7 @@ function CreationPage() {
                     }));
 
                     setPossibleVoteOptions(possibleVoteOptions_test);
-                    console.log("Vote options are " + possibleVoteOptions)
+                    setSelectedVoteOption(possibleVoteOptions_test[0])
                 })
                 .catch((error: any) => {
                     console.error('Error occurred:', error);
@@ -91,6 +91,7 @@ function CreationPage() {
     }
 
     function PossibleSelections() {
+        console.log("Possible vote options are " + possibleVoteOptions)
         return (
             <div>
                 <Dropdown options={currentElections}
@@ -99,13 +100,11 @@ function CreationPage() {
                 />
 
 
-                {possibleVoteOptions.length != 0 ?
-                    <Dropdown options={possibleVoteOptions}
-                              selectedValue={selectedVoteOption}
-                              onSelect={handleVoteSelect}
-                    />
-                    : <div> No options available </div>
-                }
+                <Dropdown options={possibleVoteOptions}
+                          selectedValue={selectedVoteOption}
+                          onSelect={handleVoteSelect}
+                />
+
 
                 <button onClick={handleVote}>Vote</button>
             </div>
