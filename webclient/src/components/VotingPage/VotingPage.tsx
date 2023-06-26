@@ -63,9 +63,7 @@ function CreationPage() {
     const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption | undefined>(undefined);
 
     const handleElectionSelect = (value: string) => {
-        console.log(value)
         const selectedElection = currentElections.find((option) => option.value === value);
-        console.log(selectedElection)
         if (selectedElection !== undefined) {
             setElectionOptionWithDownloadingOptions(selectedElection, currentElections);
         }
@@ -79,11 +77,7 @@ function CreationPage() {
     }
 
     const handleVote = async (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
-        // // TODO: get electionID and selctedVoteOption from Backend
-        // await voteInElection(electionID, selectedVoteOption.label, "JMG")
-        // await getElectionWinner(electionID, "JMG").then((e: any) => {
-        //     console.log('Got election winner', e[0]);
-        // })
+        // TODO: implement call
     }
 
     function isUserLoggedIn() {
@@ -104,7 +98,6 @@ function CreationPage() {
                           selectedValue={selectedVoteOption}
                           onSelect={handleVoteSelect}
                 />
-
 
                 <button onClick={handleVote}>Vote</button>
             </div>
