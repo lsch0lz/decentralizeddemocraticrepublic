@@ -3,7 +3,7 @@ import './VotingPage.css';
 import RoleContext from '../RoleContext';
 import SignInInfoMessage from "../SignInInfoMessage";
 import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
-import {getAllElectionIDs, getElectionName, getElectionWinner, voteInElection} from "../Contract";
+import {getAllElectionIDs, getElectionName, getOptionsFromElection} from "../Contract";
 
 function CreationPage() {
     const {currentRole} = useContext(RoleContext);
@@ -14,14 +14,7 @@ function CreationPage() {
         undefined
     );
 
-
-    // TODO: get possible vote options from backend
-    const possibleVoteOptions: DropdownOption[] = [
-        {value: 'Vote 1', label: 'Lukas'},
-        {value: 'Vote 2', label: 'Henry'},
-        {value: 'Vote 3', label: 'Ferdinand'},
-        {value: 'Vote 4', label: 'Moritz'},
-    ];
+    const [possibleVoteOptions, setPossibleVoteOptions] = useState<DropdownOption[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,14 +25,12 @@ function CreationPage() {
                 console.log(electionNames)
 
                 const updatedElections = electionNames.map((name, index) => ({
-                    value: `Election ${name}`,
-                    label: currentElectionIds[index]
+                    value: currentElectionIds[index],
+                    label: electionNames[index]
                 }));
 
-
                 setCurrentElections(updatedElections);
-                setSelectedElectionOption(updatedElections[0]);
-                console.log("updatedElections: ", updatedElections)
+                setElectionOptionWithDownloadingOptions(updatedElections[0], updatedElections);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -49,60 +40,35 @@ function CreationPage() {
     }, []); // Empty dependency array ensures the effect runs only once
 
 
-    // currentElections_ids()
-    //     .then((ids: string[]) => {
-    //
-    //         const electionNames: Promise<string>[] = ids.map((id: string) => {
-    //             const name = getElectionName(id, "JMG");
-    //             return String(name);
-    //         });
+    function setElectionOptionWithDownloadingOptions(electionOption: DropdownOption, allElections: DropdownOption[]) {
+        setSelectedElectionOption(electionOption);
+        let dropdownOption = allElections.find((option) => option.value === electionOption.value)
+        if (dropdownOption !== undefined) {
+            getOptionsFromElection(dropdownOption.value, "JMG")
+                .then((names: string[]) => {
+                    const possibleVoteOptions_test: DropdownOption[] = names.map((name: string, index: number) => ({
+                        value: index.toString(),
+                        label: name
+                    }));
 
-    // return Promise.all(electionNames);
-    // })
-    // .then((resolvedNames: string[]) => {
-    //     const currentElections_test: DropdownOption[] = resolvedNames.map((name: string) => ({
-    //         value: `Election ${name}`,
-    //         label: name
-    //     }));
-    //
-    //     console.log(currentElections_test);
-    // })
-    // .catch((error: any) => {
-    //     console.error('Error occurred:', error);
-    // });
+                    setPossibleVoteOptions(possibleVoteOptions_test);
+                    console.log("Vote options are " + possibleVoteOptions)
+                })
+                .catch((error: any) => {
+                    console.error('Error occurred:', error);
+                });
+        }
+    }
 
-
-    // const possibleVoteOptions_names = async () => await getOptionsFromElection(selectedElectionOption.label, "JMG");
-    //
-    // possibleVoteOptions_names()
-    //     .then((names: string[]) => {
-    //         const possibleVoteOptions_test: DropdownOption[] = names.map((name: string, index: number) => ({
-    //             value: `Vote ${index}`,
-    //             label: name
-    //         }));
-    //
-    //         console.log(possibleVoteOptions_test);
-    //     })
-    //     .catch((error: any) => {
-    //         console.error('Error occurred:', error);
-    //     });
-
-
-    const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption>(
-        possibleVoteOptions[0]
-    );
-
-    const [electionID, setElectionID] = useState("");
+    const [selectedVoteOption, setSelectedVoteOption] = useState<DropdownOption | undefined>(undefined);
 
     const handleElectionSelect = (value: string) => {
         console.log(value)
         const selectedElection = currentElections.find((option) => option.value === value);
         console.log(selectedElection)
         if (selectedElection !== undefined) {
-            setSelectedElectionOption(selectedElection);
+            setElectionOptionWithDownloadingOptions(selectedElection, currentElections);
         }
-
-        // TODO: get possible vote options from backend and put them into possibleVoteOptions
     };
 
     const handleVoteSelect = (value: string) => {
@@ -113,14 +79,11 @@ function CreationPage() {
     }
 
     const handleVote = async (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
-        const inputField = document.querySelector('input[name="electionID"]') as HTMLInputElement;
-        const electionID = inputField.value;
-
-        // TODO: get electionID and selctedVoteOption from Backend
-        await voteInElection(electionID, selectedVoteOption.label, "JMG")
-        await getElectionWinner(electionID, "JMG").then((e: any) => {
-            console.log('Got election winner', e[0]);
-        })
+        // // TODO: get electionID and selctedVoteOption from Backend
+        // await voteInElection(electionID, selectedVoteOption.label, "JMG")
+        // await getElectionWinner(electionID, "JMG").then((e: any) => {
+        //     console.log('Got election winner', e[0]);
+        // })
     }
 
     function isUserLoggedIn() {
@@ -130,10 +93,20 @@ function CreationPage() {
     function PossibleSelections() {
         return (
             <div>
-                <input type="electionID" name="electionID"/>
-                <Dropdown options={currentElections} onSelect={handleElectionSelect}
-                          selectedValue={selectedElectionOption}/>
-                <Dropdown options={possibleVoteOptions} onSelect={handleVoteSelect} selectedValue={selectedVoteOption}/>
+                <Dropdown options={currentElections}
+                          selectedValue={selectedElectionOption}
+                          onSelect={handleElectionSelect}
+                />
+
+
+                {possibleVoteOptions.length != 0 ?
+                    <Dropdown options={possibleVoteOptions}
+                              selectedValue={selectedVoteOption}
+                              onSelect={handleVoteSelect}
+                    />
+                    : <div> No options available </div>
+                }
+
                 <button onClick={handleVote}>Vote</button>
             </div>
         );

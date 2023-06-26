@@ -87,6 +87,7 @@ async function getAllElectionIDs(schoolName: string): Promise<string[]> {
 async function getOptionsFromElection(electionId: string, schoolName: string): Promise<any> {
     const instance = await getSchoolsContractInstance();
     const res = await instance.getOptionsFromElection(electionId, schoolName, {from: account});
+    console.log("Options: ", res)
     return res;
 }
 
