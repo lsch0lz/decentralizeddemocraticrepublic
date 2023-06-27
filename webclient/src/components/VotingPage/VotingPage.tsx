@@ -39,7 +39,6 @@ function CreationPage() {
         fetchData();
     }, []); // Empty dependency array ensures the effect runs only once
 
-
     function setElectionOptionWithDownloadingOptions(electionOption: DropdownOption, allElections: DropdownOption[]) {
         setSelectedElectionOption(electionOption);
         let dropdownOption = allElections.find((option) => option.value === electionOption.value)

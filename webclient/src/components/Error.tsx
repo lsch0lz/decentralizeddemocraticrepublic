@@ -1,10 +1,11 @@
 import React from 'react';
+import './Error.css';
 
 const Error = () => {
     return (
-        <div>
-            <p>Error: Page does not exist!</p>
-            <button onClick={() => window.location.href = '/'}>Go to Home</button>
+        <div className="error-container">
+            <p className="error-message">Error: Page does not exist!</p>
+            <button className="go-home-btn" onClick={() => window.location.href = '/'}>Go to Home</button>
         </div>
     );
 }
