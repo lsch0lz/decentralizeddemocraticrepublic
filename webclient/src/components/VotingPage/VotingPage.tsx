@@ -3,14 +3,14 @@ import './VotingPage.css';
 import RoleContext from '../RoleContext';
 import SignInInfoMessage from "../SignInInfoMessage";
 import Dropdown, {DropdownOption} from "../CreationPage/dropdown/Dropdown";
-import {getAllElectionIDs, getElectionName, getOptionsFromElection} from "../Contract";
+import {getAllElectionIDs, getElectionName, getOptionsFromElection, voteInElection} from "../Contract";
 
 function CreationPage() {
     const {currentRole} = useContext(RoleContext);
 
     let [currentElections, setCurrentElections] = useState<DropdownOption[]>([]);
 
-    const [selectedElectionOption, setSelectedElectionOption] = useState<DropdownOption | undefined>(
+    const [selectedElection, setSelectedElection] = useState<DropdownOption | undefined>(
         undefined
     );
 
@@ -21,8 +21,6 @@ function CreationPage() {
             try {
                 const currentElectionIds = await getAllElectionIDs("JMG");
                 const electionNames = await Promise.all(currentElectionIds.map((id: string) => getElectionName(id, "JMG")));
-
-                console.log(electionNames)
 
                 const updatedElections = electionNames.map((name, index) => ({
                     value: currentElectionIds[index],
@@ -40,7 +38,7 @@ function CreationPage() {
     }, []); // Empty dependency array ensures the effect runs only once
 
     function setElectionOptionWithDownloadingOptions(electionOption: DropdownOption, allElections: DropdownOption[]) {
-        setSelectedElectionOption(electionOption);
+        setSelectedElection(electionOption);
         let dropdownOption = allElections.find((option) => option.value === electionOption.value)
         if (dropdownOption !== undefined) {
             getOptionsFromElection(dropdownOption.value, "JMG")
@@ -76,7 +74,13 @@ function CreationPage() {
     }
 
     const handleVote = async (mouseEvent: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO: implement call
+        if (selectedElection != undefined && selectedVoteOption != undefined) {
+            voteInElection(selectedElection.value, selectedVoteOption.label, "JMG")
+                .then(() => {})
+                .catch((error: any) => {
+                    console.error('Error occurred:', error);
+                });
+        }
     }
 
     function isUserLoggedIn() {
@@ -84,14 +88,12 @@ function CreationPage() {
     }
 
     function PossibleSelections() {
-        console.log("Possible vote options are " + possibleVoteOptions)
         return (
             <div>
                 <Dropdown options={currentElections}
-                          selectedValue={selectedElectionOption}
+                          selectedValue={selectedElection}
                           onSelect={handleElectionSelect}
                 />
-
 
                 <Dropdown options={possibleVoteOptions}
                           selectedValue={selectedVoteOption}
@@ -102,7 +104,6 @@ function CreationPage() {
             </div>
         );
     }
-
 
     return (
         <div className="creation-page-container"> {/* Apply the container class */}
