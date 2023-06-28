@@ -90,15 +90,21 @@ function CreationPage() {
     function PossibleSelections() {
         return (
             <div>
-                <Dropdown options={currentElections}
-                          selectedValue={selectedElection}
-                          onSelect={handleElectionSelect}
-                />
+                <div className="dropdown-container">
+                    <Dropdown
+                        options={currentElections}
+                        selectedValue={selectedElection}
+                        onSelect={handleElectionSelect}
+                    />
+                </div>
 
-                <Dropdown options={possibleVoteOptions}
-                          selectedValue={selectedVoteOption}
-                          onSelect={handleVoteSelect}
-                />
+                <div className="dropdown-container">
+                    <Dropdown
+                        options={possibleVoteOptions}
+                        selectedValue={selectedVoteOption}
+                        onSelect={handleVoteSelect}
+                    />
+                </div>
 
                 <button onClick={handleVote}>Vote</button>
             </div>

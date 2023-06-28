@@ -5,6 +5,20 @@
     margin-top: 50px;
 }
 
-h2 {
-    margin-top: 20px;
+.creation-page-container > div {
+    margin-bottom: 10px;
 }
+
+.creation-page-container h2,
+.creation-page-container button {
+    margin-top: 10px;
+}
+
+.creation-page-container button {
+    margin-bottom: 20px;
+}
+
+.creation-page-container .dropdown-container {
+    margin-bottom: 20px;
+}
+
