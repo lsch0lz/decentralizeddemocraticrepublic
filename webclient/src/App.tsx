@@ -8,6 +8,7 @@ import Error from "./components/Error";
 import Navigation, {NavLinkItem} from "./components/Navigation";
 import CreationPage from "./components/CreationPage/CreationPage";
 import VotingPage from "./components/VotingPage/VotingPage";
+import NewsPage from "./components/NewsPage/NewsPage";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         {text: 'Home', path: '/'},
         {text: 'About', path: '/about'},
         {text: 'Contact', path: '/contact'},
+        {text: 'News', path: '/news'},
         {text: 'Login', path: '/login'},
         {text: 'Create', path: '/create'},
         {text: 'Voting', path: '/voting'}
@@ -28,6 +30,7 @@ function App() {
                     <Navigation navLinks={navLinks}/>
                     <Routes>
                         <Route path="/" Component={Home}/>
+                        <Route path="/news" Component={NewsPage}/>
                         <Route path="/create" Component={CreationPage}/>
                         <Route path="/voting" Component={VotingPage}/>
                         <Route path="/about" Component={About}/>
