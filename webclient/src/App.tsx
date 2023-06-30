@@ -16,7 +16,6 @@ function App() {
     const navLinks: NavLinkItem[] = [
         {text: 'Home', path: '/'},
         {text: 'About', path: '/about'},
-        {text: 'Contact', path: '/contact'},
         {text: 'News', path: '/news'},
         {text: 'Login', path: '/login'},
         {text: 'Create', path: '/create'},
