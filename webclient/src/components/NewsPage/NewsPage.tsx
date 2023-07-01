@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import SignInInfoMessage from "../SignInInfoMessage";
 import {getAllElectionIDs, getElectionName, getElectionWinner} from "../Contract";
 import RoleContext from "../RoleContext";
@@ -14,24 +14,28 @@ function NewsPage() {
     const [electionResults, setElectionResults] = useState<ElectionResult[]>([]);
 
 
-    async function showWinner() {
-        // Show all elections and the current winner
-        const currentElectionIds = await getAllElectionIDs("JMG");
-        const electionNames = await Promise.all(currentElectionIds.map((id: string) => getElectionName(id, "JMG")));
-        const electionWinners = await Promise.all(currentElectionIds.map((id: string) => getElectionWinner(id, "JMG")));
+    useEffect(() => {
+        async function showWinner() {
+            // Show all elections and the current winner
+            const currentElectionIds = await getAllElectionIDs("JMG");
+            const electionNames = await Promise.all(currentElectionIds.map((id: string) => getElectionName(id, "JMG")));
+            const electionWinners = await Promise.all(currentElectionIds.map((id: string) => getElectionWinner(id, "JMG")));
 
-        let results = electionNames.map((name, index) => ({
-            value: electionWinners[index], // Set the value as the winner
-            label: name, // Set the label as the election name
-        }));
+            let map = electionNames.map((name, index) => ({
+                value: electionWinners[index][0], // Set the value as the winner
+                label: name, // Set the label as the election name
+            }));
+            console.log(map);
+            setElectionResults(map);
+        }
 
-        setElectionResults(results);
-    }
+        showWinner();
+    }, []); // Empty dependency array ensures the effect runs only once
+
 
     function isUserLoggedIn() {
         return currentRole !== null;
     }
-
 
 
     function PossibleNewsPage() {
@@ -39,10 +43,9 @@ function NewsPage() {
             <div>
                 <h1>News Page</h1>
                 <p>Hier könnt ihr die neuesten Abstimmungen und ihre Gewinner sehen!</p>
-                <button onClick={() => showWinner()}>Show Winner</button>
 
                 {electionResults.map((result, index) => (
-                    <RenderElectionResult key={index} electionResult={result} />
+                    <RenderElectionResult key={index} electionResult={result}/>
                 ))}
 
             </div>
@@ -64,7 +67,11 @@ function RenderElectionResult(props: RenderElectionResultProps) {
     let props1 = props;
 
     return (
-        <p>{props1.electionResult.label}</p>
+        <div>
+            <p>{props1.electionResult.label}</p>
+            <p>{props1.electionResult.value}</p>
+        </div>
+
     )
 }
 
