@@ -37,7 +37,7 @@ export function ElectionCreation() {
     const saveToChain = async (e: React.FormEvent) => {
         e.preventDefault();
         // // TODO: Save to chain
-        await createElection("1", electionName, optionsList, "JMG");
+        await createElection("2", electionName, optionsList, "JMG");
         console.log('Saving election to chain with name:', electionName)
         console.log('Saving election to chain with options:', optionsList)
     };
