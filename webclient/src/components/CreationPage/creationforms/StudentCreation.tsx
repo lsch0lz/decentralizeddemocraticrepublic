@@ -6,7 +6,6 @@ export function StudentCreation() {
     const [studentPassword, setStudentPassword] = useState('');
     const [classId, setClassId] = useState('');
 
-
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStudentName(e.target.value);
     };
