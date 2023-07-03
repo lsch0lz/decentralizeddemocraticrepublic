@@ -40,6 +40,7 @@ export function ElectionCreation() {
         let id = uuidv4();
 
         await createElection(id, electionName, optionsList, "JMG");
+
         console.log('Saving election to chain with name:', electionName)
         console.log('Saving election to chain with options:', optionsList)
     };
