@@ -14,12 +14,6 @@ export function LoginPage() {
 
     const handleLogin = () => {
 
-        // TODO: call chain like this (no time time to implement)
-        login(username, password, "JMG").then(r =>
-            console.log(r)
-        ).catch(e => console.log(e))
-
-        // Check if username and password match the value from App.tsx
         if (username === 'example' && password === 'password') {
             // Successful login
             console.log('Login successful');
@@ -28,8 +22,27 @@ export function LoginPage() {
             setCurrentRole(Role.Principal)
         } else {
             // Failed login
-            console.log('Login failed');
-            setLoginError(true);
+            login(username, password, "JMG")
+                .then(r => {
+                    console.log(r[0])
+                    if (r[0] == true) {
+                        console.log('Login successful');
+                        setShowSuccessMessage(true);
+                        setLoginError(false);
+
+                        if (r[1] == "student") {
+                            setCurrentRole(Role.Student)
+                        } else {
+                            setCurrentRole(Role.Teacher)
+                        }
+                    }
+                })
+                .catch(e => {
+                    setLoginError(true)
+                    console.log(e)
+                })
+
+
         }
     };
 
