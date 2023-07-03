@@ -68,8 +68,9 @@ function RenderElectionResult(props: RenderElectionResultProps) {
 
     return (
         <div>
-            <p>{props1.electionResult.label}</p>
-            <p>{props1.electionResult.value}</p>
+            <p>_____________________________________</p>
+            <p>Abstimmungname: {props1.electionResult.label}</p>
+            <p>Gewinner: {props1.electionResult.value}</p>
         </div>
 
     )
