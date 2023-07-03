@@ -1,40 +1,55 @@
 import React, {useContext, useState} from "react"
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
+import {addTeacherToClass} from "../../Contract";
 
 export function TeacherCreation() {
     const [teacherName, setTeacherName] = useState('');
-    const [classId, setClassId] = useState('');
+    const [teacherPassword, setTeacherPassword] = useState('');
+    const [className, setClassName] = useState('');
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTeacherName(event.target.value);
     };
 
-    const handleClassIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setClassId(event.target.value);
+    const handleClassNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setClassName(event.target.value);
     };
 
-    const saveToChain = (event: React.FormEvent<HTMLFormElement>) => {
+    const saveToChain = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // TODO: Save to chain
-        const teacherId = 1
 
-        // TODO: call function
+        await addTeacherToClass(
+            teacherName,
+            teacherPassword,
+            className,
+            "JMG"
+        )
+    }
+
+    function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setTeacherPassword(event.target.value);
     }
 
     return (
         <div className="TecherCreation">
             <form onSubmit={saveToChain}>
                 <CustomFormLabel
-                    label={"Teacher Name"}
+                    label={"Lehrer Name"}
                     type="text"
                     value={teacherName}
                     onChange={handleNameChange}
                 />
                 <CustomFormLabel
-                    label={"Class ID (TODO: Render class info here)"} // TODO
+                    label={"Lehrer Passwort"}
+                    type="password"
+                    value={teacherPassword}
+                    onChange={handlePasswordChange}
+                />
+                <CustomFormLabel
+                    label={"Klasse"}
                     type="text"
-                    value={classId}
-                    onChange={handleClassIdChange}
+                    value={className}
+                    onChange={handleClassNameChange}
                 />
                 <button type="submit">Add Teacher to Class</button>
             </form>
