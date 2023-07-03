@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {CustomFormLabel} from '../customInput/CustomFormLabel';
 import './ElectionCreation.css';
 import {createElection, getElectionWinner, voteInElection} from "../../Contract";
-
+import { v4 as uuidv4 } from 'uuid';
 
 interface OptionsFormProps {
     onSubmit: (options: string[]) => void;
@@ -36,8 +36,11 @@ export function ElectionCreation() {
 
     const saveToChain = async (e: React.FormEvent) => {
         e.preventDefault();
-        // // TODO: Save to chain
-        await createElection("2", electionName, optionsList, "JMG");
+
+        let id = uuidv4();
+
+        await createElection(id, electionName, optionsList, "JMG");
+
         console.log('Saving election to chain with name:', electionName)
         console.log('Saving election to chain with options:', optionsList)
     };
