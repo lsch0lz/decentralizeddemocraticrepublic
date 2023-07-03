@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
+import {addStudentToClass, createClass} from "../../Contract";
 
 
 // const createClass = async (web3: Web3, constract: Contract, classId: number, name: string) => {
@@ -19,16 +20,14 @@ export function ClassCreation() {
         setClassName(e.target.value);
     };
 
-
-    const saveToChain = () => {
-        // // TODO: ClassId?, Woher Schoolname?
-        // createClass(
-        //     "Name",
-        //     "schoolname"
-        // ).then(() => {
-        //     console.log('Class created');
-        // });
+    const saveToChain = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await createClass(
+            className,
+            "JMG"
+        )
     }
+
 
     return (
         <div className="ClassCreation">

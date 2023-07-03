@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import {CustomFormLabel} from "../customInput/CustomFormLabel";
+import {addStudentToClass} from "../../Contract";
 
 export function StudentCreation() {
     const [studentName, setStudentName] = useState('');
     const [studentPassword, setStudentPassword] = useState('');
-    const [classId, setClassId] = useState('');
+    const [className, setClassName] = useState('');
 
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setStudentName(e.target.value);
@@ -15,35 +16,38 @@ export function StudentCreation() {
     };
 
     const handleClassIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setClassId(event.target.value);
+        setClassName(event.target.value);
     };
 
-    const saveToChain = () => {
-        // TODO: Save to chain
-        const studentId = 1
-        // TODO: hash password
-        // TODO: call function
+    const saveToChain = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await addStudentToClass(
+            studentName,
+            studentPassword,
+            className,
+            "JMG"
+        )
     }
 
     return (
         <div className="SchoolCreation">
             <form onSubmit={saveToChain}>
                 <CustomFormLabel
-                    label={"Student Name"}
+                    label={"Schüler Name"}
                     type="text"
                     value={studentName}
                     onChange={handleNameChange}
                 />
                 <CustomFormLabel
-                    label={"Student Password"}
-                    type="text"
+                    label={"Schüler Passwort"}
+                    type="password"
                     value={studentPassword}
                     onChange={handlePasswordChange}
                 />
                 <CustomFormLabel
-                    label={"Class ID (TODO: Render class info here)"} // TODO
+                    label={"Klassenname"}
                     type="text"
-                    value={classId}
+                    value={className}
                     onChange={handleClassIdChange}
                 />
                 <button type="submit">Add Student to School</button>

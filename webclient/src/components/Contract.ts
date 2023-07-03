@@ -13,7 +13,7 @@ const SchoolsContract = contract(SchoolsContractJson);
 SchoolsContract.setProvider(provider);
 
 // TODO: Set your account address here
-const account = '0x256BC640a64093911380cF0C5BB799B3D80930f5';
+const account = '0xB94cE570657628412FC4776E81b9cb06dE9417c3';
 
 // Helper function to get deployed contract instance
 async function getSchoolsContractInstance(): Promise<any> {
